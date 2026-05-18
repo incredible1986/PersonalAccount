@@ -34,7 +34,7 @@ namespace PersonalAccount
 
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
             builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentAuthRepo>();
+            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
             builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
             
             if (builder.Environment.IsDevelopment())
