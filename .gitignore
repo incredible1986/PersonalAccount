@@ -548,7 +548,6 @@ RuntimeModelBaseline.txt
 # (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
 #bower_components/
 # ASP.NET Core default setup: bower directory is configured as wwwroot/lib/ and bower restore is true
-**/wwwroot/lib/
 
 # Paket dependency manager
 .paket/paket.exe
