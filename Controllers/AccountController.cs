@@ -31,17 +31,8 @@ namespace PersonalAccount.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
                 return View(model);
             }
-
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, student.Id.ToString()),
-                new(ClaimTypes.Name, student.FullName),
-                new(ClaimTypes.Email, student.Email),
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            
+            await auth.SignInAsync(HttpContext, student);
 
             return Redirect(model.ReturnUrl ?? "/");
         }
