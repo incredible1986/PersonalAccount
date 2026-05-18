@@ -6,11 +6,11 @@ using PersonalAccount.Repositories.Mappers;
 
 namespace PersonalAccount.Repositories;
 
-public class StudentAuthRepo(AppDbContext context, IMapper<StudentEntity, StudentAuthModel> mapper) : IStudentRepo<StudentAuthModel>
+public class StudentRepo<T>(AppDbContext context, IMapper<StudentEntity, T> mapper) : IStudentRepo<T> where T : StudentModel
 {
     private DbSet<StudentEntity> Students => context.Students;
     
-    public async Task<StudentAuthModel?> GetByEmailAsync(string email)
+    public async Task<T?> GetByEmailAsync(string email)
     {
         var entity = await Students
             .AsNoTracking()

@@ -15,13 +15,13 @@ namespace PersonalAccount.Controllers
                 ReturnUrl = returnUrl
             });
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            
+
             var student = await auth.ValidateStudentAsync(model.Email, model.Password);
             if (student is null)
             {
@@ -29,15 +29,17 @@ namespace PersonalAccount.Controllers
                 return View(model);
             }
             
+            await auth.SignInAsync(HttpContext, student);
             return Redirect(model.ReturnUrl ?? "/");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            throw new NotImplementedException();
+            await auth.SignOutAsync(HttpContext);
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied()
