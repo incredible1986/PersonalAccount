@@ -22,9 +22,11 @@ namespace PersonalAccount
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    // options.LoginPath = "Account/Login";
-                    // options.LogoutPath = "Account/Logout";
-                    // options.AccessDeniedPath = "Account/AccessDenied";
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    // options.AccessDeniedPath = "/Account/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromDays(int.Parse(builder.Configuration["Auth:ExpireTimeInDays"]!));
+                    options.SlidingExpiration = true;
                 });
             builder.Services.AddAuthorization();
             builder.Services.AddDbContext<AppDbContext>(options =>

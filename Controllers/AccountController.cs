@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Auth;
@@ -33,16 +30,16 @@ namespace PersonalAccount.Controllers
             }
             
             await auth.SignInAsync(HttpContext, student);
-
             return Redirect(model.ReturnUrl ?? "/");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            throw new NotImplementedException();
+            await auth.SignOutAsync(HttpContext);
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied()

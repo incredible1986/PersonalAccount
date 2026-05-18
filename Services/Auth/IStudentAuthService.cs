@@ -6,5 +6,6 @@ namespace PersonalAccount.Services.Auth
     {
         Task<StudentModel?> ValidateStudentAsync(string email, string password);
         Task SignInAsync(HttpContext ctx, StudentModel student);
+        Task SignOutAsync(HttpContext ctx);
     }
 }

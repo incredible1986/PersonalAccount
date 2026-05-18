@@ -33,5 +33,7 @@ namespace PersonalAccount.Services.Auth
 
             await ctx.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
+
+        public async Task SignOutAsync(HttpContext ctx) => await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 }
