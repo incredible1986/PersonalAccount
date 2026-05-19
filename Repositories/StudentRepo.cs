@@ -37,4 +37,13 @@ public class StudentRepo<T>(AppDbContext context, IMapper<StudentEntity, T> mapp
             .FirstOrDefaultAsync(entity => entity.Email == email);
         return mapper.ToModel(entity);
     }
+
+    public async Task UpdatePasswordHashAsync(int id, string passwordHash)
+    {
+        var entity = await Students.FindAsync(id)
+            ?? throw new InvalidOperationException($"Student with id {id} not found");
+
+        entity.PasswordHash = passwordHash;
+        await context.SaveChangesAsync();
+    }
 }
