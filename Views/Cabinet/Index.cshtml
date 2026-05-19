@@ -1,9 +1,18 @@
 ﻿@model StudentModel
 
 <h1>Личный кабинет</h1>
-<p>ID: @Model.Id</p>
-<p>Email: @Model.Email</p>
-<p>Full Name: @Model.FullName</p>
-<p>Group Name: @Model.GroupName</p>
-<p>Photo</p>
-<img src="@Model.PhotoUrl" alt="@Model.FullName"/>
+
+<p><strong>ID:</strong> @Model.Id</p>
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Имя:</strong> @Model.FullName</p>
+<p><strong>Группа:</strong> @Model.GroupName</p>
+
+@if (Model.PhotoUrl != null)
+{
+    <p><strong>Фото:</strong></p>
+    <img src="@Model.PhotoUrl" alt="@Model.FullName" style="max-width:200px" class="mb-3" />
+}
+
+<form method="get" asp-controller="Cabinet" asp-action="Edit">
+    <button type="submit" class="btn btn-primary">Редактировать</button>
+</form>
