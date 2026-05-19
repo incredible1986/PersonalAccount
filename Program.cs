@@ -40,6 +40,7 @@ namespace PersonalAccount
             builder.Services.AddScoped<IMapper<StudentEntity, StudentModel>, StudentMapper>();
             builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
             builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<IPasswordService, PasswordService>();
 
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
