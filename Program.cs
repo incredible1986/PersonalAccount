@@ -6,6 +6,7 @@ using PersonalAccount.Data.Entities;
 using PersonalAccount.Models.Students;
 using PersonalAccount.Repositories;
 using PersonalAccount.Repositories.Mappers;
+using PersonalAccount.Services;
 using PersonalAccount.Services.Auth;
 using PersonalAccount.Services.Db;
 
@@ -36,7 +37,10 @@ namespace PersonalAccount
             builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
             builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
             builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
-            
+            builder.Services.AddScoped<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
 
