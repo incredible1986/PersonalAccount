@@ -32,6 +32,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
     public async Task<IActionResult> SendEmailConfirmation()
     {
         var studentId = User.GetId();
+        var studentEmail = User.GetEmail();
         if (studentId == null) return RedirectToAction("Error", "Home");
         var token = confirmation.GenerateTokenAsync(studentId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
@@ -39,7 +40,12 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
             studentId, token
         }, Request.Scheme);
 
-        await emailSender.SendEmailAsync("shamraev.alexandr@gmail.com", "Подтверждение почты", confirmationUrl!);
+        await emailSender.SendEmailAsync(studentEmail!, "Подтверждение почты", $"""
+                                                                               <head></head>
+                                                                               <body>
+                                                                               <p>{confirmationUrl}</p>
+                                                                               </body>
+                                                                               """);
         return RedirectToAction("Index", "Cabinet");
     }
 }
