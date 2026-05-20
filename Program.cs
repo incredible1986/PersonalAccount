@@ -11,6 +11,7 @@ using PersonalAccount.Services;
 using PersonalAccount.Services.Auth;
 using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Services.Db;
+using PersonalAccount.Services.Email;
 
 namespace PersonalAccount
 {
@@ -35,10 +36,13 @@ namespace PersonalAccount
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnection")));
 
+            builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+            
             // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
             builder.Services.AddScoped<IStudentService, StudentService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
             
