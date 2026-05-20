@@ -6,6 +6,7 @@ using PersonalAccount.Data.Entities;
 using PersonalAccount.Models.Students;
 using PersonalAccount.Repositories;
 using PersonalAccount.Repositories.Mappers;
+using PersonalAccount.Services;
 using PersonalAccount.Services.Auth;
 using PersonalAccount.Services.Db;
 
@@ -32,14 +33,23 @@ namespace PersonalAccount
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnection")));
 
+            // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
-            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
-            builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
-            
+            builder.Services.AddScoped<IStudentService, StudentService>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
-
+            
+            // Repositories
+            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
+            builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            
+            // Mappers
+            builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
+            builder.Services.AddScoped<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            
+            // Others
+            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
