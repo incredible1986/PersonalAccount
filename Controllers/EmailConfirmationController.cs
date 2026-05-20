@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Confirmation;
+using PersonalAccount.Services.Email;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Controllers;
 
-public class EmailConfirmationController(IConfirmationTokenService confirmation) : Controller
+public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSender emailSender) : Controller
 {
     [HttpGet]
     public IActionResult Index(int studentId, string token) => View(new ConfirmEmailViewModel
@@ -24,7 +25,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation)
             return RedirectToAction("Error", "Home");
         return RedirectToAction("Index", "Cabinet");
     }
-    
+
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
@@ -37,8 +38,8 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation)
         {
             studentId, token
         }, Request.Scheme);
-        
-        // TODO: отправка письма через сервис. В письмо крепится confirmationUrl
+
+        await emailSender.SendEmailAsync("shamraev.alexandr@gmail.com", "Подтверждение почты", confirmationUrl!);
         return RedirectToAction("Index", "Cabinet");
     }
 }
