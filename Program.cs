@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
 using PersonalAccount.Models.Students;
 using PersonalAccount.Repositories;
 using PersonalAccount.Repositories.Mappers;
+using PersonalAccount.Services;
 using PersonalAccount.Services.Auth;
+using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Services.Db;
+using PersonalAccount.Services.Email;
 
 namespace PersonalAccount
 {
@@ -32,14 +36,29 @@ namespace PersonalAccount
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnection")));
 
-            builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
-            builder.Services.AddScoped<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
-            builder.Services.AddScoped<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
+            builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
             
+            // Services
+            builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
-
+            
+            // Repositories
+            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
+            builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
+            
+            // Mappers
+            builder.Services.AddSingleton<IMapper<StudentEntity, StudentAuthModel>, StudentAuthMapper>();
+            builder.Services.AddSingleton<IMapper<StudentEntity, StudentModel>, StudentMapper>();
+            builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
+            
+            // Others
+            builder.Services.AddSingleton<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

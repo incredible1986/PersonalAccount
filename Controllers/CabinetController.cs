@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalAccount.Models.Students;
+using PersonalAccount.Services;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Controllers;
 
 [Authorize]
-public class CabinetController : Controller
+public class CabinetController(IStudentService cabinet) : Controller
 {
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var studentId = User.GetId();
         if (studentId == null) return RedirectToAction("Error", "Home");
+        var student = await cabinet.GetByIdAsync(studentId.Value);
+        if (student == null ) return RedirectToAction("Error", "Home");
         
-        return View(new StudentModel
-        {
-            Id = studentId.Value,
-        });
+        return View(student);
     }
 }
