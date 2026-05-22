@@ -2,31 +2,29 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using PersonalAccount.Models.Students;
+using PersonalAccount.Models;
 using PersonalAccount.Repositories;
 
 namespace PersonalAccount.Services.Auth
 {
-    public class StudentAuthService(IStudentRepo<StudentAuthModel> students, IPasswordHasher<StudentAuthModel> hasher)
+    public class StudentAuthService(IAccountRepo accounts, IPasswordHasher<AccountModel> hasher)
         : IStudentAuthService
     {
-        public async Task<StudentModel?> ValidateStudentAsync(string email, string password)
+        public async Task<AccountModel?> ValidateAsync(string email, string password)
         {
-            var student = await students.GetByEmailAsync(email);
-            if (student is null) return null;
+            var account = await accounts.GetByEmailAsync(email);
+            if (account is null) return null;
 
-            var result = hasher.VerifyHashedPassword(student, student.PasswordHash, password);
-            if (result == PasswordVerificationResult.Failed) return null;
-            return student.Clone() as StudentModel;
+            var result = hasher.VerifyHashedPassword(account, account.PasswordHash, password);
+            return result == PasswordVerificationResult.Failed ? null : account;
         }
 
-        public async Task SignInAsync(HttpContext ctx, StudentModel student)
+        public async Task SignInAsync(HttpContext ctx, AccountModel account)
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, student.Id.ToString()),
-                new(ClaimTypes.Name, student.FullName),
-                new(ClaimTypes.Email, student.Email),
+                new(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new(ClaimTypes.Email, account.Email),
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

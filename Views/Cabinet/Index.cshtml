@@ -1,4 +1,4 @@
-﻿@model StudentModel
+﻿@model PersonalAccount.ViewModels.StudentCabinetViewModel
 @{
     ViewData["Title"] = "Личный кабинет";
 }
@@ -17,15 +17,20 @@
         </header>
         <main class="card-body">
             <p class="mb-1 fw-semibold">Группа: @Model.GroupName</p>
-            <form class="d-flex align-content-center" asp-controller="EmailConfirmation" asp-action="SendEmailConfirmation">
+            <form class="d-flex gap-2 align-content-center" asp-controller="EmailConfirmation"
+                  asp-action="SendEmailConfirmation">
                 <span class="mb-1 text-primary">@Model.Email</span>
-                <button class="btn btn-link text-danger" type="submit" >Подтвердить</button>
+                @if (Model.IsEmailConfirmed)
+                {
+                    <span class="text-success fst-italic">Почта подтверждена</span>
+                }
+                else
+                {
+                    <button class="btn btn-link nav-link text-danger" type="submit">Подтвердить</button>
+                }
             </form>
 
         </main>
-        <footer class="card-footer">
-            <p class="text-end">ID: @Model.Id</p>
-        </footer>
     </div>
 </div>
 

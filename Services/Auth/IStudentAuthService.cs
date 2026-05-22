@@ -1,11 +1,11 @@
-﻿using PersonalAccount.Models.Students;
+﻿using PersonalAccount.Models;
 
 namespace PersonalAccount.Services.Auth
 {
     public interface IStudentAuthService
     {
-        Task<StudentModel?> ValidateStudentAsync(string email, string password);
-        Task SignInAsync(HttpContext ctx, StudentModel student);
+        Task<AccountModel?> ValidateAsync(string email, string password);
+        Task SignInAsync(HttpContext ctx, AccountModel account);
         Task SignOutAsync(HttpContext ctx);
     }
 }
