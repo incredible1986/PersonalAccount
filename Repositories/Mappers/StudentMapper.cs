@@ -1,15 +1,15 @@
 ﻿using PersonalAccount.Data.Entities;
-using PersonalAccount.Models.Students;
+using PersonalAccount.Models;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Repositories.Mappers;
 
-public class StudentMapper : IMapper<StudentEntity, StudentModel>
+public class StudentMapper : IMapper<StudentProfileEntity, StudentProfileModel>
 {
-    public StudentEntity? ToEntity(StudentModel? model) =>
+    public StudentProfileEntity? ToEntity(StudentProfileModel? model) =>
         model is null
             ? null
-            : new StudentEntity
+            : new StudentProfileEntity
             {
                 Id = model.Id,
                 Email = model.Email,
@@ -18,10 +18,10 @@ public class StudentMapper : IMapper<StudentEntity, StudentModel>
                 PhotoUrl = model.PhotoUrl?.ToString()
             };
 
-    public StudentModel? ToModel(StudentEntity? entity) =>
+    public StudentProfileModel? ToModel(StudentProfileEntity? entity) =>
         entity is null
             ? null
-            : new StudentModel
+            : new StudentProfileModel
             {
                 Id = entity.Id,
                 Email = entity.Email,

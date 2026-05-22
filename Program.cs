@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
-using PersonalAccount.Models.Students;
 using PersonalAccount.Repositories;
 using PersonalAccount.Repositories.Mappers;
 using PersonalAccount.Services;
@@ -47,17 +46,17 @@ namespace PersonalAccount
                 builder.Services.AddScoped<DbSeeder>();
             
             // Repositories
-            builder.Services.AddScoped<IStudentRepo<StudentAuthModel>, StudentRepo<StudentAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentModel>, StudentRepo<StudentModel>>();
+            builder.Services.AddScoped<IStudentRepo<StudentProfileAuthModel>, StudentRepo<StudentProfileAuthModel>>();
+            builder.Services.AddScoped<IStudentRepo<StudentProfileModel>, StudentRepo<StudentProfileModel>>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             
             // Mappers
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentAuthModel>, StudentAuthMapper>();
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentModel>, StudentMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileAuthModel>, StudentAuthMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentMapper>();
             builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
             
             // Others
-            builder.Services.AddSingleton<IPasswordHasher<StudentAuthModel>, PasswordHasher<StudentAuthModel>>();
+            builder.Services.AddSingleton<IPasswordHasher<StudentProfileAuthModel>, PasswordHasher<StudentProfileAuthModel>>();
             
             var app = builder.Build();
 

@@ -4,6 +4,7 @@ using PersonalAccount.Models;
 using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Services.Email;
 using PersonalAccount.Utils;
+using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 
@@ -12,7 +13,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
     [HttpGet]
     public IActionResult Index(int studentId, string token) => View(new ConfirmEmailViewModel
     {
-        StudentId = studentId,
+        AccountId = studentId,
         Token = token
     });
 
@@ -20,7 +21,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
     {
-        var confirmed = await confirmation.ValidateTokenAsync(model.StudentId, model.Token);
+        var confirmed = await confirmation.ValidateTokenAsync(model.AccountId, model.Token);
         if (!confirmed)
             return RedirectToAction("Error", "Home");
         return RedirectToAction("Index", "Cabinet");

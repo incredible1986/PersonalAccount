@@ -12,7 +12,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
         var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         var confirmation = new ConfirmationTokenModel
         {
-            StudentId = studentId,
+            AccountId = studentId,
             ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             TokenHash = HashToken(token),
         };

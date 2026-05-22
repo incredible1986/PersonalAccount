@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
-using PersonalAccount.Models.Students;
+using PersonalAccount.Models;
 using PersonalAccount.Repositories.Mappers;
 
 namespace PersonalAccount.Repositories;
 
-public class StudentRepo<T>(AppDbContext context, IMapper<StudentEntity, T> mapper) : IStudentRepo<T> where T : StudentModel
+public class StudentRepo<T>(AppDbContext context, IMapper<StudentProfileEntity, T> mapper) : IStudentRepo<T> where T : StudentProfileModel
 {
-    private DbSet<StudentEntity> Students => context.Students;
+    private DbSet<StudentProfileEntity> Students => context.StudentProfiles;
     
     public async Task<T?> GetByEmailAsync(string email)
     {

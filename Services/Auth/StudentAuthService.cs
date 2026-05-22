@@ -2,31 +2,30 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using PersonalAccount.Models.Students;
 using PersonalAccount.Repositories;
 
 namespace PersonalAccount.Services.Auth
 {
-    public class StudentAuthService(IStudentRepo<StudentAuthModel> students, IPasswordHasher<StudentAuthModel> hasher)
+    public class StudentAuthService(IStudentRepo<StudentProfileAuthModel> students, IPasswordHasher<StudentProfileAuthModel> hasher)
         : IStudentAuthService
     {
-        public async Task<StudentModel?> ValidateStudentAsync(string email, string password)
+        public async Task<StudentProfileModel?> ValidateStudentAsync(string email, string password)
         {
             var student = await students.GetByEmailAsync(email);
             if (student is null) return null;
 
             var result = hasher.VerifyHashedPassword(student, student.PasswordHash, password);
             if (result == PasswordVerificationResult.Failed) return null;
-            return student.Clone() as StudentModel;
+            return student.Clone() as StudentProfileModel;
         }
 
-        public async Task SignInAsync(HttpContext ctx, StudentModel student)
+        public async Task SignInAsync(HttpContext ctx, StudentProfileModel studentProfile)
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, student.Id.ToString()),
-                new(ClaimTypes.Name, student.FullName),
-                new(ClaimTypes.Email, student.Email),
+                new(ClaimTypes.NameIdentifier, studentProfile.Id.ToString()),
+                new(ClaimTypes.Name, studentProfile.FullName),
+                new(ClaimTypes.Email, studentProfile.Email),
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

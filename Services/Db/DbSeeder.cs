@@ -2,20 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
-using PersonalAccount.Models.Students;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Services.Db;
 
-public class DbSeeder(AppDbContext context, IPasswordHasher<StudentAuthModel> hasher)
+public class DbSeeder(AppDbContext context, IPasswordHasher<StudentProfileAuthModel> hasher)
 {
     public async Task SeedAsync()
     {
         await context.Database.MigrateAsync();
-        var hasStudents = await context.Students.AnyAsync();
+        var hasStudents = await context.StudentProfiles.AnyAsync();
         if (hasStudents) return;
 
-        var model = new StudentAuthModel
+        var model = new StudentProfileAuthModel
         {
             FullName = "John Doe",
             GroupName = "PD-412",
@@ -23,7 +22,7 @@ public class DbSeeder(AppDbContext context, IPasswordHasher<StudentAuthModel> ha
             PhotoUrl = "https://masterpiecer-images.s3.yandex.net/5fd531dca6427c7:upscaled".ToUri(),
         };
 
-        var entity = new StudentEntity
+        var entity = new StudentProfileEntity
         {
             FullName = model.FullName,
             GroupName = model.GroupName,
@@ -32,7 +31,7 @@ public class DbSeeder(AppDbContext context, IPasswordHasher<StudentAuthModel> ha
             PasswordHash = hasher.HashPassword(model, "example")
         };
         
-        await context.Students.AddAsync(entity);
+        await context.StudentProfiles.AddAsync(entity);
         await context.SaveChangesAsync();
     }
 }

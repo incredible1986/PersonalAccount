@@ -11,7 +11,7 @@ public class ConfirmationTokenMapper : IMapper<ConfirmationTokenEntity, Confirma
             : new ConfirmationTokenEntity
             {
                 Id = model.Id,
-                StudentId = model.StudentId,
+                StudentId = model.AccountId,
                 TokenHash = model.TokenHash,
                 ExpiresAt = model.ExpiresAt,
                 ConfirmedAt = model.ConfirmedAt,
@@ -23,7 +23,7 @@ public class ConfirmationTokenMapper : IMapper<ConfirmationTokenEntity, Confirma
             : new ConfirmationTokenModel
             {
                 Id = entity.Id,
-                StudentId = entity.StudentId,
+                AccountId = entity.StudentId,
                 TokenHash = entity.TokenHash,
                 ExpiresAt = entity.ExpiresAt,
                 ConfirmedAt = entity.ConfirmedAt,

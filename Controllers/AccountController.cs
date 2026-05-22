@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services.Auth;
+using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers
 {
