@@ -10,7 +10,7 @@ namespace PersonalAccount.Services.Auth
     public class StudentAuthService(IAccountRepo accounts, IPasswordHasher<AccountModel> hasher)
         : IStudentAuthService
     {
-        public async Task<AccountModel?> ValidateStudentAsync(string email, string password)
+        public async Task<AccountModel?> ValidateAsync(string email, string password)
         {
             var account = await accounts.GetByEmailAsync(email);
             if (account is null) return null;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalAccount.Models;
 using PersonalAccount.Services;
+using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Utils;
 using PersonalAccount.ViewModels;
@@ -14,16 +15,17 @@ public class CabinetController(IStudentCabinetService cabinet, IConfirmationToke
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var studentId = User.GetId();
-        if (studentId == null) return RedirectToAction("Error", "Home");
-        var student = await cabinet.GetByIdAsync(studentId.Value);
+        var accountId = User.GetId();
+        var accountEmail = User.GetEmail();
+        if (accountId == null || accountEmail == null) return RedirectToAction("Error", "Home");
+        var student = await cabinet.GetByAccountIdAsync(accountId.Value);
         if (student == null ) return RedirectToAction("Error", "Home");
         
         var isEmailConfirmed = await confirmation.HasAnyConfirmedTokenAsync(student.Id);
         
         return View(new StudentCabinetViewModel
         {
-            Email =  student.Email,
+            Email =  accountEmail,
             FullName = student.FullName,
             GroupName =  student.GroupName,
             PhotoUrl = student.PhotoUrl?.ToString(),

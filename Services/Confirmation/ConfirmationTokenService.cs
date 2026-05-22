@@ -7,12 +7,12 @@ namespace PersonalAccount.Services.Confirmation;
 
 public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IConfirmationTokenService
 {
-    public async Task<string> GenerateTokenAsync(int studentId)
+    public async Task<string> GenerateTokenAsync(int accountId)
     {
         var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         var confirmation = new ConfirmationTokenModel
         {
-            AccountId = studentId,
+            AccountId = accountId,
             ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             TokenHash = HashToken(token),
         };
@@ -20,9 +20,9 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
         return token;
     }
 
-    public async Task<bool> ValidateTokenAsync(int studentId, string token)
+    public async Task<bool> ValidateTokenAsync(int accountId, string token)
     {
-        var confirmationTokens = await confirmations.GetByAccountIdAsync(studentId);
+        var confirmationTokens = await confirmations.GetByAccountIdAsync(accountId);
         var tokenHash = HashToken(token);
         var confirmation = confirmationTokens.FirstOrDefault(confirmation =>
             confirmation.TokenHash == tokenHash
@@ -41,9 +41,9 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
         }
     }
 
-    public async Task<bool> HasAnyConfirmedTokenAsync(int studentId)
+    public async Task<bool> HasAnyConfirmedTokenAsync(int accountId)
     {
-        var confirmationTokens = await confirmations.GetByAccountIdAsync(studentId);
+        var confirmationTokens = await confirmations.GetByAccountIdAsync(accountId);
         return confirmationTokens.Any(confirmation => confirmation.ConfirmedAt != null);
     }
 

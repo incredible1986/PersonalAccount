@@ -11,9 +11,9 @@ namespace PersonalAccount.Controllers;
 public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSender emailSender) : Controller
 {
     [HttpGet]
-    public IActionResult Index(int studentId, string token) => View(new ConfirmEmailViewModel
+    public IActionResult Index(int accountId, string token) => View(new ConfirmEmailViewModel
     {
-        AccountId = studentId,
+        AccountId = accountId,
         Token = token
     });
 
@@ -32,16 +32,16 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SendEmailConfirmation()
     {
-        var studentId = User.GetId();
-        var studentEmail = User.GetEmail();
-        if (studentId == null) return RedirectToAction("Error", "Home");
-        var token = await confirmation.GenerateTokenAsync(studentId.Value);
+        var accountId = User.GetId();
+        var accountEmail = User.GetEmail();
+        if (accountId == null || accountEmail == null) return RedirectToAction("Error", "Home");
+        var token = await confirmation.GenerateTokenAsync(accountId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
-            studentId, token
+            studentId = accountId, token
         }, Request.Scheme);
 
-        await emailSender.SendEmailAsync(studentEmail!, "Подтверждение почты", $"""
+        await emailSender.SendEmailAsync(accountEmail, "Подтверждение почты", $"""
                                                                                <head></head>
                                                                                <body>
                                                                                <p>{confirmationUrl}</p>

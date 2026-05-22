@@ -37,7 +37,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         builder.Entity<StudentProfileEntity>(entity =>
         {
-            entity.ToTable("students");
+            entity.ToTable("student_profiles");
 
             entity.HasKey(student => student.Id);
             entity.Property(student => student.Id)
