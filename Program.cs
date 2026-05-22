@@ -8,6 +8,7 @@ using PersonalAccount.Repositories;
 using PersonalAccount.Repositories.Mappers;
 using PersonalAccount.Services;
 using PersonalAccount.Services.Auth;
+using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Services.Db;
 using PersonalAccount.Services.Email;
@@ -39,24 +40,24 @@ namespace PersonalAccount
             
             // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
-            builder.Services.AddScoped<IStudentCabinetService, StudentCabinetCabinetService>();
+            builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbSeeder>();
             
             // Repositories
-            builder.Services.AddScoped<IAccountRepo<StudentProfileAuthModel>, AccountRepo<StudentProfileAuthModel>>();
-            builder.Services.AddScoped<IAccountRepo<StudentProfileModel>, AccountRepo<StudentProfileModel>>();
+            builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+            builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             
             // Mappers
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileAuthModel>, StudentAuthMapper>();
+            builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
             
             // Others
-            builder.Services.AddSingleton<IPasswordHasher<StudentProfileAuthModel>, PasswordHasher<StudentProfileAuthModel>>();
+            builder.Services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
             
             var app = builder.Build();
 

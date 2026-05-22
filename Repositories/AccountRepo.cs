@@ -6,7 +6,7 @@ using PersonalAccount.Repositories.Mappers;
 
 namespace PersonalAccount.Repositories;
 
-public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountModel> mapper)
+public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountModel> mapper) : IAccountRepo
 {
     private DbSet<AccountEntity> Accounts => context.Accounts;
 
