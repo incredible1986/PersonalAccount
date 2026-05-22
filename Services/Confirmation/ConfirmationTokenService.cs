@@ -13,7 +13,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
         var confirmation = new ConfirmationTokenModel
         {
             StudentId = studentId,
-            ExpiresAt = DateTime.UtcNow.AddSeconds(30),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             TokenHash = HashToken(token),
         };
         await confirmations.CreateAsync(confirmation);
@@ -39,6 +39,12 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
         {
             return false;
         }
+    }
+
+    public async Task<bool> HasAnyConfirmedTokenAsync(int studentId)
+    {
+        var confirmationTokens = await confirmations.GetByStudentIdAsync(studentId);
+        return confirmationTokens.Any(confirmation => confirmation.ConfirmedAt != null);
     }
 
     private static string HashToken(string token) =>

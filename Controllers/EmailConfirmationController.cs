@@ -34,7 +34,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
         var studentId = User.GetId();
         var studentEmail = User.GetEmail();
         if (studentId == null) return RedirectToAction("Error", "Home");
-        var token = confirmation.GenerateTokenAsync(studentId.Value);
+        var token = await confirmation.GenerateTokenAsync(studentId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
             studentId, token

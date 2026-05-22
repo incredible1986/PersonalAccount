@@ -3,5 +3,6 @@
 public interface IConfirmationTokenService
 {
     Task<string> GenerateTokenAsync(int studentId);
-    Task<bool> ValidateTokenAsync( int studentId, string token);
+    Task<bool> ValidateTokenAsync(int studentId, string token);
+    Task<bool> HasAnyConfirmedTokenAsync(int studentId);
 }
