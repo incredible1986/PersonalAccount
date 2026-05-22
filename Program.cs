@@ -46,13 +46,13 @@ namespace PersonalAccount
                 builder.Services.AddScoped<DbSeeder>();
             
             // Repositories
-            builder.Services.AddScoped<IStudentRepo<StudentProfileAuthModel>, StudentRepo<StudentProfileAuthModel>>();
-            builder.Services.AddScoped<IStudentRepo<StudentProfileModel>, StudentRepo<StudentProfileModel>>();
+            builder.Services.AddScoped<IAccountRepo<StudentProfileAuthModel>, AccountRepo<StudentProfileAuthModel>>();
+            builder.Services.AddScoped<IAccountRepo<StudentAccountModel>, AccountRepo<StudentAccountModel>>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             
             // Mappers
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileAuthModel>, StudentAuthMapper>();
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentAccountModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
             
             // Others

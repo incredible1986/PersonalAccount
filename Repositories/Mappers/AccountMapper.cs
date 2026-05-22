@@ -3,16 +3,16 @@ using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories.Mappers;
 
-public class AccountMapper : IMapper<AccountEntity, ProfileModel>
+public class AccountMapper : IMapper<AccountEntity, AccountModel>
 {
-    public AccountEntity ToEntity(ProfileModel model) => new()
+    public AccountEntity ToEntity(AccountModel model) => new()
     {
         Id = model.AccountId,
         Email = model.Email,
         PasswordHash = model.PasswordHash
     };
 
-    public ProfileModel ToModel(AccountEntity entity) => new()
+    public AccountModel ToModel(AccountEntity entity) => new()
     {
         AccountId = entity.Id,
         Email = entity.Email,

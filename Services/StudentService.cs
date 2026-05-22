@@ -3,7 +3,7 @@ using PersonalAccount.Repositories;
 
 namespace PersonalAccount.Services;
 
-public class StudentService(IStudentRepo<StudentProfileModel> students) : IStudentService
+public class StudentService(IAccountRepo<StudentAccountModel> accounts) : IStudentService
 {
-    public Task<StudentProfileModel?> GetByIdAsync(int id) => students.GetByIdAsync(id);
+    public Task<StudentAccountModel?> GetByIdAsync(int id) => accounts.GetByIdAsync(id);
 }

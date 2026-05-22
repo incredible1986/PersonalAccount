@@ -4,8 +4,8 @@ namespace PersonalAccount.Services.Auth
 {
     public interface IStudentAuthService
     {
-        Task<StudentProfileModel?> ValidateStudentAsync(string email, string password);
-        Task SignInAsync(HttpContext ctx, StudentProfileModel studentProfile);
+        Task<StudentAccountModel?> ValidateStudentAsync(string email, string password);
+        Task SignInAsync(HttpContext ctx, StudentAccountModel studentAccount);
         Task SignOutAsync(HttpContext ctx);
     }
 }

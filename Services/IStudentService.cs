@@ -4,5 +4,5 @@ namespace PersonalAccount.Services;
 
 public interface IStudentService
 {
-    Task<StudentProfileModel?> GetByIdAsync(int id);
+    Task<StudentAccountModel?> GetByIdAsync(int id);
 }

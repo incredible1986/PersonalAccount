@@ -1,6 +1,6 @@
 ﻿namespace PersonalAccount.Models;
 
-public class StudentProfileModel : ProfileModel
+public class StudentAccountModel : AccountModel
 {
     public int ProfileId { get; set; }
 

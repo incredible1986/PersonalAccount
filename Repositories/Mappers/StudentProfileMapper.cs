@@ -4,9 +4,9 @@ using PersonalAccount.Utils;
 
 namespace PersonalAccount.Repositories.Mappers;
 
-public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfileModel>
+public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentAccountModel>
 {
-    public StudentProfileEntity ToEntity(StudentProfileModel model) =>
+    public StudentProfileEntity ToEntity(StudentAccountModel model) =>
         new()
         {
             Id = model.ProfileId,
@@ -15,7 +15,7 @@ public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfile
             PhotoUrl = model.PhotoUrl?.ToString()
         };
 
-    public StudentProfileModel ToModel(StudentProfileEntity entity) =>
+    public StudentAccountModel ToModel(StudentProfileEntity entity) =>
         new()
         {
             ProfileId = entity.Id,

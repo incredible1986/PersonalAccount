@@ -6,12 +6,12 @@ using PersonalAccount.Repositories;
 
 namespace PersonalAccount.Services.Auth
 {
-    public class StudentAuthService(IStudentRepo<StudentProfileAuthModel> students, IPasswordHasher<StudentProfileAuthModel> hasher)
+    public class StudentAuthService(IAccountRepo<StudentProfileAuthModel> accounts, IPasswordHasher<StudentProfileAuthModel> hasher)
         : IStudentAuthService
     {
         public async Task<StudentProfileModel?> ValidateStudentAsync(string email, string password)
         {
-            var student = await students.GetByEmailAsync(email);
+            var student = await accounts.GetByEmailAsync(email);
             if (student is null) return null;
 
             var result = hasher.VerifyHashedPassword(student, student.PasswordHash, password);

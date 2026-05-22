@@ -22,7 +22,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
 
     public async Task<bool> ValidateTokenAsync(int studentId, string token)
     {
-        var confirmationTokens = await confirmations.GetByStudentIdAsync(studentId);
+        var confirmationTokens = await confirmations.GetByAccountIdAsync(studentId);
         var tokenHash = HashToken(token);
         var confirmation = confirmationTokens.FirstOrDefault(confirmation =>
             confirmation.TokenHash == tokenHash
@@ -43,7 +43,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmations) : IC
 
     public async Task<bool> HasAnyConfirmedTokenAsync(int studentId)
     {
-        var confirmationTokens = await confirmations.GetByStudentIdAsync(studentId);
+        var confirmationTokens = await confirmations.GetByAccountIdAsync(studentId);
         return confirmationTokens.Any(confirmation => confirmation.ConfirmedAt != null);
     }
 
