@@ -52,7 +52,7 @@ namespace PersonalAccount
             
             // Mappers
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileAuthModel>, StudentAuthMapper>();
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
             
             // Others
