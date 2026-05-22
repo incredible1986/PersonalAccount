@@ -2,11 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Models;
+using PersonalAccount.Repositories.Mappers;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Services.Db;
 
-public class DbSeeder(AppDbContext context, IPasswordHasher<StudentProfileAuthModel> hasher)
+public class DbSeeder(
+    AppDbContext context,
+    IPasswordHasher<AccountModel> hasher,
+    IMapper<AccountEntity, AccountModel> accountMapper,
+    IMapper<StudentProfileEntity, StudentProfileModel> studentProfileMapper)
 {
     public async Task SeedAsync()
     {
@@ -14,24 +20,29 @@ public class DbSeeder(AppDbContext context, IPasswordHasher<StudentProfileAuthMo
         var hasStudents = await context.StudentProfiles.AnyAsync();
         if (hasStudents) return;
 
-        var model = new StudentProfileAuthModel
+        var account = new AccountModel
         {
-            FullName = "John Doe",
-            GroupName = "PD-412",
-            Email = "example@top",
-            PhotoUrl = "https://masterpiecer-images.s3.yandex.net/5fd531dca6427c7:upscaled".ToUri(),
+            Email = "shamraev.alexandr@gmail.com"
         };
 
-        var entity = new StudentProfileEntity
+        var accountEntity = accountMapper.ToEntity(account);
+        accountEntity.PasswordHash = hasher.HashPassword(account, "example");
+
+        await context.Accounts.AddAsync(accountEntity);
+        await context.SaveChangesAsync();
+
+        accountEntity = await context.Accounts.AsNoTracking()
+            .FirstOrDefaultAsync(entity => entity.Email == account.Email) ?? throw new InvalidOperationException();
+
+        var studentProfile = new StudentProfileModel
         {
-            FullName = model.FullName,
-            GroupName = model.GroupName,
-            Email = model.Email,
-            PhotoUrl = model.PhotoUrl?.ToString(),
-            PasswordHash = hasher.HashPassword(model, "example")
+            AccountId = accountEntity.Id,
+            FullName = "John Doe",
+            GroupName = "PD-412",
+            PhotoUrl = "https://masterpiecer-images.s3.yandex.net/5fd531dca6427c7:upscaled".ToUri(),
         };
-        
-        await context.StudentProfiles.AddAsync(entity);
+        var studentProfileEntity = studentProfileMapper.ToEntity(studentProfile);
+        await context.StudentProfiles.AddAsync(studentProfileEntity);
         await context.SaveChangesAsync();
     }
 }

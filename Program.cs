@@ -39,7 +39,7 @@ namespace PersonalAccount
             
             // Services
             builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
-            builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<IStudentCabinetService, StudentCabinetCabinetService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             if (builder.Environment.IsDevelopment())
@@ -47,12 +47,12 @@ namespace PersonalAccount
             
             // Repositories
             builder.Services.AddScoped<IAccountRepo<StudentProfileAuthModel>, AccountRepo<StudentProfileAuthModel>>();
-            builder.Services.AddScoped<IAccountRepo<StudentAccountModel>, AccountRepo<StudentAccountModel>>();
+            builder.Services.AddScoped<IAccountRepo<StudentProfileModel>, AccountRepo<StudentProfileModel>>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             
             // Mappers
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileAuthModel>, StudentAuthMapper>();
-            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentAccountModel>, StudentProfileMapper>();
+            builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
             
             // Others

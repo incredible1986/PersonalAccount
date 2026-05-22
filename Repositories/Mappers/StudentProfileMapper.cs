@@ -4,21 +4,23 @@ using PersonalAccount.Utils;
 
 namespace PersonalAccount.Repositories.Mappers;
 
-public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentAccountModel>
+public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfileModel>
 {
-    public StudentProfileEntity ToEntity(StudentAccountModel model) =>
+    public StudentProfileEntity ToEntity(StudentProfileModel model) =>
         new()
         {
-            Id = model.ProfileId,
+            Id = model.Id,
+            AccountId = model.AccountId,
             GroupName = model.GroupName,
             FullName = model.FullName,
             PhotoUrl = model.PhotoUrl?.ToString()
         };
 
-    public StudentAccountModel ToModel(StudentProfileEntity entity) =>
+    public StudentProfileModel ToModel(StudentProfileEntity entity) =>
         new()
         {
-            ProfileId = entity.Id,
+            Id = entity.Id,
+            AccountId = entity.AccountId,
             GroupName = entity.GroupName,
             FullName = entity.FullName,
             PhotoUrl = entity.PhotoUrl?.ToUri()

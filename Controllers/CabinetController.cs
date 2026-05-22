@@ -9,7 +9,7 @@ using PersonalAccount.ViewModels;
 namespace PersonalAccount.Controllers;
 
 [Authorize]
-public class CabinetController(IStudentService cabinet, IConfirmationTokenService confirmation) : Controller
+public class CabinetController(IStudentCabinetService cabinet, IConfirmationTokenService confirmation) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index()
