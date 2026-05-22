@@ -38,7 +38,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
         var token = await confirmation.GenerateTokenAsync(accountId.Value);
         var confirmationUrl = Url.Action("Index", "EmailConfirmation", new
         {
-            studentId = accountId, token
+            accountId, token
         }, Request.Scheme);
 
         await emailSender.SendEmailAsync(accountEmail, "Подтверждение почты", $"""
