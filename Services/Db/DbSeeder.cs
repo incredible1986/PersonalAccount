@@ -22,7 +22,7 @@ public class DbSeeder(
 
         var account = new AccountModel
         {
-            Email = "shamraev.alexandr@gmail.com"
+            Email = "incrediblemej@gmail.com"
         };
 
         var accountEntity = accountMapper.ToEntity(account);
