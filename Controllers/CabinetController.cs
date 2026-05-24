@@ -10,26 +10,33 @@ using PersonalAccount.ViewModels;
 namespace PersonalAccount.Controllers;
 
 [Authorize]
-public class CabinetController(IStudentCabinetService cabinet, IConfirmationTokenService confirmation) : Controller
+public class CabinetController : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var accountId = User.GetId();
-        var accountEmail = User.GetEmail();
-        if (accountId == null || accountEmail == null) return RedirectToAction("Error", "Home");
-        var student = await cabinet.GetByAccountIdAsync(accountId.Value);
-        if (student == null ) return RedirectToAction("Error", "Home");
-        
-        var isEmailConfirmed = await confirmation.HasAnyConfirmedTokenAsync(student.Id);
-        
-        return View(new StudentCabinetViewModel
-        {
-            Email =  accountEmail,
-            FullName = student.FullName,
-            GroupName =  student.GroupName,
-            PhotoUrl = student.PhotoUrl?.ToString(),
-            IsEmailConfirmed = isEmailConfirmed
-        });
+        if (User.IsInRole(AccountRole.Admin.ToString()))
+            return RedirectToAction("Admin");
+
+        if (User.IsInRole(AccountRole.Student.ToString()))
+            return RedirectToAction("Student");
+
+        return Forbid();
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Student")]
+    public IActionResult Student()
+    {
+        // TODO: вернуть кабинет студента
+        return View(/*...*/);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public IActionResult Admin()
+    {
+        // TODO: вернуть кабинет администратора
+        return View(/*...*/);
     }
 }
