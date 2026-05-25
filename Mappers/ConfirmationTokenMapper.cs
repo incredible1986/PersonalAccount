@@ -1,7 +1,7 @@
 ﻿using PersonalAccount.Data.Entities;
 using PersonalAccount.Models;
 
-namespace PersonalAccount.Repositories.Mappers;
+namespace PersonalAccount.Mappers;
 
 public class ConfirmationTokenMapper : IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>
 {
