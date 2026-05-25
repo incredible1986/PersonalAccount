@@ -25,6 +25,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
             
+            entity.Property(account => account.Role)
+                .HasColumnName("role")
+                .IsRequired();
+            
             entity.Property(account => account.Email)
                 .HasColumnName("email")
                 .HasMaxLength(255)

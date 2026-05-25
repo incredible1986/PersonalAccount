@@ -35,6 +35,10 @@ namespace PersonalAccount.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("password_hash");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("role");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")

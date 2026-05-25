@@ -1,10 +1,11 @@
 ﻿using PersonalAccount.Models;
+using PersonalAccount.Types;
 
 namespace PersonalAccount.Repositories
 {
     public interface IAccountRepo
     {
         public Task<AccountModel?> GetByEmailAsync(string email);
-        public Task<AccountModel?> GetByIdAsync(int id);
+        public Task<List<AccountModel>> GetAllByRoleAsync(AccountRoles role);
     }
 }

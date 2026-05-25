@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repositories.Mappers;
 
 namespace PersonalAccount.Repositories;
 

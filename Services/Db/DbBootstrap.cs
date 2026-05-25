@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PersonalAccount.Data;
 using PersonalAccount.Data.Entities;
+using PersonalAccount.Mappers;
 using PersonalAccount.Models;
-using PersonalAccount.Repositories.Mappers;
 using PersonalAccount.Utils;
 
 namespace PersonalAccount.Services.Db;
 
-public class DbSeeder(
+public class DbBootstrap(
     AppDbContext context,
     IPasswordHasher<AccountModel> hasher,
     IMapper<AccountEntity, AccountModel> accountMapper,
-    IMapper<StudentProfileEntity, StudentProfileModel> studentProfileMapper)
+    IMapper<StudentProfileEntity, StudentProfileModel> studentProfileMapper,
+    IOptions<DbBootstrapSettings> options)
 {
+    private readonly DbBootstrapSettings _settings = options.Value;
+
     public async Task SeedAsync()
     {
         await context.Database.MigrateAsync();
@@ -22,11 +26,11 @@ public class DbSeeder(
 
         var account = new AccountModel
         {
-            Email = "shamraev.alexandr@gmail.com"
+            Email = _settings.Email
         };
 
         var accountEntity = accountMapper.ToEntity(account);
-        accountEntity.PasswordHash = hasher.HashPassword(account, "example");
+        accountEntity.PasswordHash = hasher.HashPassword(account, _settings.Password);
 
         await context.Accounts.AddAsync(accountEntity);
         await context.SaveChangesAsync();

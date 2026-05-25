@@ -2,7 +2,7 @@
 using PersonalAccount.Models;
 using PersonalAccount.Utils;
 
-namespace PersonalAccount.Repositories.Mappers;
+namespace PersonalAccount.Mappers;
 
 public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfileModel>
 {
