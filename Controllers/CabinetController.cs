@@ -12,6 +12,20 @@ namespace PersonalAccount.Controllers;
 [Authorize]
 public class CabinetController : Controller
 {
+    private readonly IStudentCabinetService _cabinet;
+    private readonly IConfirmationTokenService _confirmation;
+    private readonly IAdminCabinetService _adminCabinet;
+
+    public CabinetController(
+     IStudentCabinetService cabinet,
+     IConfirmationTokenService confirmation,
+     IAdminCabinetService adminCabinet)
+    {
+        _cabinet = cabinet;
+        _confirmation = confirmation;
+        _adminCabinet = adminCabinet;
+    }
+
     [HttpGet]
     public IActionResult Index()
     {
@@ -26,17 +40,51 @@ public class CabinetController : Controller
 
     [HttpGet]
     [Authorize(Roles = "Student")]
-    public IActionResult Student()
+    public async Task<IActionResult> Student()
     {
-        // TODO: вернуть кабинет студента
-        return View(/*...*/);
+        var accountId = User.GetId();
+        var accountEmail = User.GetEmail();
+        if (accountId == null || accountEmail == null) return RedirectToAction("Error", "Home");
+        var student = await _cabinet.GetByAccountIdAsync(accountId.Value);
+        if (student == null) return RedirectToAction("Error", "Home");
+
+        var isEmailConfirmed = await _confirmation.HasAnyConfirmedTokenAsync(accountId.Value);
+
+        return View(new StudentCabinetViewModel
+        {
+            Email = accountEmail,
+            FullName = student.FullName,
+            GroupName = student.GroupName,
+            PhotoUrl = student.PhotoUrl?.ToString(),
+            IsEmailConfirmed = isEmailConfirmed
+        });
     }
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public IActionResult Admin()
+    public async Task<IActionResult> Admin()
     {
-        // TODO: вернуть кабинет администратора
-        return View(/*...*/);
+        var accounts = await _adminCabinet.GetAllStudentAccountsAsync();
+        var profiles = await _adminCabinet.GetAllStudentProfilesAsync();
+
+        var students = new List<AdminCabinetStudentViewModel>();
+
+        foreach (var profile in profiles)
+        {
+            if (accounts.TryGetValue(profile.AccountId, out var account))
+            {
+                students.Add(new AdminCabinetStudentViewModel
+                {
+                    FullName = profile.FullName,
+                    GroupName = profile.GroupName,
+                    PhotoUrl = profile.PhotoUrl?.ToString()
+                });
+            }
+        }
+
+        return View(new AdminCabinetViewModel
+        {
+            Students = students
+        });
     }
 }
