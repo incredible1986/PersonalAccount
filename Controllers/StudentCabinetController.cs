@@ -22,7 +22,7 @@ public class StudentCabinetController(IStudentCabinetService cabinet, IConfirmat
         var student = await cabinet.GetByAccountIdAsync(accountId.Value);
         if (student == null) return RedirectToAction("Error", "Home");
 
-        var isEmailConfirmed = await confirmation.HasAnyConfirmedTokenAsync(student.Id);
+        var isEmailConfirmed = await confirmation.HasAnyConfirmedTokenAsync(accountId.Value);
 
         return View(new StudentCabinetViewModel
         {

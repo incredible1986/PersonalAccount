@@ -26,4 +26,19 @@ public class AdminCabinetController(IAdminCabinetService cabinet) : Controller
             }).ToList()
         });
     }
+
+    [HttpGet]
+    public IActionResult AddStudent()
+    {
+        return View(new AddStudentViewModel());
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddStudent(AddStudentViewModel model)
+    {
+        if (!ModelState.IsValid) return  View(model);
+        
+        return RedirectToAction("Index");
+    }
 }

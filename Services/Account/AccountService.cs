@@ -1,16 +1,18 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using PersonalAccount.Models;
 using PersonalAccount.Repositories;
+using PersonalAccount.Types;
 
-namespace PersonalAccount.Services.Auth
+namespace PersonalAccount.Services.Account
 {
-    public class StudentAuthService(IAccountRepo accounts, IPasswordHasher<AccountModel> hasher)
-        : IStudentAuthService
+    public class AccountService(IAccountRepo accounts, IPasswordHasher<AccountModel> hasher)
+        : IAccountService
     {
-        public async Task<AccountModel?> ValidateAsync(string email, string password)
+        public async Task<AccountModel?> ValidateCredentialsAsync(string email, string password)
         {
             var account = await accounts.GetByEmailAsync(email);
             if (account is null) return null;
@@ -35,5 +37,19 @@ namespace PersonalAccount.Services.Auth
 
         public async Task SignOutAsync(HttpContext ctx) =>
             await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        public async Task<string> RegisterAsync(string email, AccountRoles role)
+        {
+            var account = new AccountModel
+            {
+                Email = email,
+                Role = role,
+            };
+            var password = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
+            account.PasswordHash = hasher.HashPassword(account, password);
+            await accounts.AddAsync(account);
+            
+            return password;
+        }
     }
 }

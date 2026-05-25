@@ -12,7 +12,7 @@
     <div class="container d-flex flex-wrap gap-2">
         @foreach (var student in Model.Students)
         {
-            <div class="card d-grid" style="grid-template-columns: repeat(2, 1fr)">
+            <div class="card d-grid" style="grid-template-columns: repeat(2, 1fr); width: 400px">
                 <div class="w-100 h-100 "
                      style="background-image: url(@student.PhotoUrl);
                      background-size: cover;">
@@ -24,6 +24,10 @@
                 </div>
             </div>
         }
+        
+        <form class="card" method="get" asp-action="AddStudent" style="width: 400px">
+            <button class="btn btn-outline-primary w-100 h-100">Добавить</button>
+        </form>
     </div>
 </div>
 

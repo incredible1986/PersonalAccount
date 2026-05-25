@@ -6,7 +6,7 @@ using PersonalAccount.Data.Entities;
 using PersonalAccount.Mappers;
 using PersonalAccount.Models;
 using PersonalAccount.Repositories;
-using PersonalAccount.Services.Auth;
+using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Confirmation;
 using PersonalAccount.Services.Db;
@@ -41,7 +41,7 @@ namespace PersonalAccount
             builder.Services.Configure<DbBootstrapSettings>(builder.Configuration.GetSection("DbBootstrap"));
 
             // Services
-            builder.Services.AddScoped<IStudentAuthService, StudentAuthService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             if (builder.Environment.IsDevelopment())
