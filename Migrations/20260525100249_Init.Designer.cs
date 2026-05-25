@@ -11,8 +11,8 @@ using PersonalAccount.Data;
 namespace PersonalAccount.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260520131654_CreateConfirmationTokenTable")]
-    partial class CreateConfirmationTokenTable
+    [Migration("20260525100249_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,38 +20,7 @@ namespace PersonalAccount.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
 
-            modelBuilder.Entity("PersonalAccount.Data.Entities.ConfirmationTokenEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime?>("ConfirmedAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("confirmed_at");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("expires_at");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("student_id");
-
-                    b.Property<string>("TokenHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("token_hash");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("confirmation_tokens", (string)null);
-                });
-
-            modelBuilder.Entity("PersonalAccount.Data.Entities.StudentEntity", b =>
+            modelBuilder.Entity("PersonalAccount.Data.Entities.AccountEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,6 +32,65 @@ namespace PersonalAccount.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT")
                         .HasColumnName("email");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("password_hash");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("role");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("accounts", (string)null);
+                });
+
+            modelBuilder.Entity("PersonalAccount.Data.Entities.ConfirmationTokenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("account_id");
+
+                    b.Property<DateTime?>("ConfirmedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("confirmed_at");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("token_hash");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("confirmation_tokens", (string)null);
+                });
+
+            modelBuilder.Entity("PersonalAccount.Data.Entities.StudentProfileEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("account_id");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -76,37 +104,45 @@ namespace PersonalAccount.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("group_name");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("password_hash");
-
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("TEXT")
                         .HasColumnName("photo_url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("students", (string)null);
+                    b.ToTable("student_profiles", (string)null);
                 });
 
             modelBuilder.Entity("PersonalAccount.Data.Entities.ConfirmationTokenEntity", b =>
                 {
-                    b.HasOne("PersonalAccount.Data.Entities.StudentEntity", "Student")
+                    b.HasOne("PersonalAccount.Data.Entities.AccountEntity", "Account")
                         .WithMany("ConfirmationTokens")
-                        .HasForeignKey("StudentId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Student");
+                    b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("PersonalAccount.Data.Entities.StudentEntity", b =>
+            modelBuilder.Entity("PersonalAccount.Data.Entities.StudentProfileEntity", b =>
+                {
+                    b.HasOne("PersonalAccount.Data.Entities.AccountEntity", "Account")
+                        .WithOne("StudentProfile")
+                        .HasForeignKey("PersonalAccount.Data.Entities.StudentProfileEntity", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("PersonalAccount.Data.Entities.AccountEntity", b =>
                 {
                     b.Navigation("ConfirmationTokens");
+
+                    b.Navigation("StudentProfile");
                 });
 #pragma warning restore 612, 618
         }
