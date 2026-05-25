@@ -1,0 +1,28 @@
+﻿@model AdminCabinetViewModel
+
+<h1>Кабинет администратора</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Фото</th>
+            <th>ФИО</th>
+            <th>Группа</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(student.PhotoUrl))
+                    {
+                        <img src="@student.PhotoUrl" alt="@student.FullName" style="max-width: 50px;" />
+                    }
+                </td>
+                <td>@student.FullName</td>
+                <td>@student.GroupName</td>
+            </tr>
+        }
+    </tbody>
+</table>
