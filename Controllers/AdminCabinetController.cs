@@ -22,20 +22,26 @@ public class AdminCabinetController(
         var accounts = (await cabinetService.GetAllStudentAccountsAsync())
             .ToDictionary(account => account.Id);
         var profiles = await cabinetService.GetAllStudentProfilesAsync();
-        var groups = (await cabinetService.GetAllGroupsAsync())
-            .ToDictionary(group => group.Id);
+        var groups = await cabinetService.GetAllGroupsAsync();
+        var groupsDictionary = groups.ToDictionary(group => group.Id);
 
         return View(new AdminCabinetViewModel
         {
-            Students = profiles.Select(profile => new AdminCabinetStudentViewModel
+            GroupsOrder = groups.OrderBy(group => group.Name).Select(group => group.Id).ToList(),
+            Groups = groupsDictionary.Select(group => (group.Key, new AdminCabinetGroupViewModel
             {
-                Email = accounts[profile.AccountId].Email,
-                FullName = profile.FullName,
-                GroupName = profile.GroupId == null
-                    ? GroupModelConstants.NoGroup.Name
-                    : groups[profile.GroupId.Value].Name,
-                PhotoUrl = profile.PhotoUrl?.ToString(),
-            }).ToList()
+                Name = group.Value.Name,
+                ImageUrl = group.Value.ImageUrl?.ToString(),
+                Description = group.Value.Description
+            })).ToDictionary(),
+            StudentProfiles = profiles.GroupBy(profile => profile.GroupId)
+                .ToDictionary(group => group.Key, group =>
+                    group.Select(profile => new AdminCabinetStudentViewModel
+                    {
+                        Email = accounts[profile.AccountId].Email,
+                        FullName = profile.FullName,
+                        PhotoUrl = profile.PhotoUrl?.ToString()
+                    }).ToList())
         });
     }
 
@@ -57,7 +63,7 @@ public class AdminCabinetController(
             ModelState.AddModelError(string.Empty, "Email is already registered");
             return View(model);
         }
-        
+
         var password = await accountService.RegisterAsync(model.Email, AccountRoles.Student);
         await cabinetService.AddStudentProfileAsync(model.Email, model.FullName);
         await emailSenderService.SendEmailAsync(model.ContactEmail, "Данные для входа в личный кабинет",

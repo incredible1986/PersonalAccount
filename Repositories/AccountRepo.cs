@@ -30,4 +30,6 @@ public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountMod
     }
 
     public async Task<bool> AnyAsync() => await Accounts.AnyAsync();
+
+    
 }

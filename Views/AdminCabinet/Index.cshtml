@@ -9,22 +9,41 @@
         <h1 class="text-start text-uppercase">Панель администратора</h1>
     </header>
 
-    <div class="container d-flex flex-wrap gap-2">
-        @foreach (var student in Model.Students)
+    <div class="container d-flex flex-column align-items-stretch gap-5">
+        @foreach (var groupId in Model.GroupsOrder)
         {
-            <div class="card d-grid" style="grid-template-columns: repeat(2, 1fr); width: 400px">
-                <div class="w-100 h-100 "
-                     style="background-image: url(@student.PhotoUrl);
+            var group = Model.Groups[groupId];
+            var students = Model.StudentProfiles[groupId];
+            <div class="w-100 d-flex flex-column align-items-stretch gap-2">
+                <div class="card d-flex align-content-center justify-content-center text-white"
+                     style="
+                         height: 100px;
+                         background-image: url(@group.ImageUrl);
                      background-size: cover;">
+                    <header class="text-center ">
+                        <h3>@group.Name</h3>
+                    </header>
+                    <span class="text-wrap">@group.Description</span>
                 </div>
-                <div class="d-flex flex-column align-items-stretch justify-content-center">
-                    <span class="mb-1 text-primary">@student.Email</span>
-                    <span class="mb-1">@student.FullName</span>
-                    <span class="mb-1">@student.GroupName</span>
+                <div class="container d-flex flex-wrap gap-2">
+                    @foreach (var student in students)
+                    {
+                        <div class="card d-grid" style="grid-template-columns: repeat(2, 1fr); width: 400px">
+                            <div class="w-100 h-100 "
+                                 style="
+                                     background-image: url(@student.PhotoUrl);
+                                 background-size: cover;">
+                            </div>
+                            <div class="d-flex flex-column align-items-stretch justify-content-center">
+                                <span class="mb-1 text-primary">@student.Email</span>
+                                <span class="mb-1">@student.FullName</span>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         }
-        
+
         <form class="card" method="get" asp-action="AddStudent" style="width: 400px">
             <button class="btn btn-outline-primary w-100 h-100">Добавить</button>
         </form>

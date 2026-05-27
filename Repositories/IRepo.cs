@@ -10,4 +10,7 @@ public interface IRepo<TModel> where TModel : Model
     // READ
     Task<TModel?> GetByIdAsync(int id);
     Task<List<TModel>> GetAllAsync();
+    
+    // DELETE 
+    Task DeleteByIdAsync(int id);
 }

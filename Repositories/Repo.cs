@@ -37,4 +37,11 @@ public abstract class Repo<TEntity, TModel>(
             .Select(entity => Mapper.ToModel(entity))
             .ToListAsync();
     }
+
+    public async Task DeleteByIdAsync(int id)
+    {
+        var entity = await Table.FindAsync(id) ?? throw new KeyNotFoundException();
+        Table.Remove(entity);
+        await Context.SaveChangesAsync();
+    }
 }

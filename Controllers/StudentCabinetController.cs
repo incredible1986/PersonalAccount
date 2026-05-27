@@ -25,9 +25,7 @@ public class StudentCabinetController(
         if (student == null) return RedirectToAction("Error", "Home");
 
         var isEmailConfirmed = await confirmationTokenService.HasAnyConfirmedTokenAsync(accountId.Value);
-        var group = student.GroupId == null
-            ? GroupModelConstants.NoGroup
-            : await cabinetService.GetStudentGroup(student.GroupId.Value);
+        var group = await cabinetService.GetStudentGroup(student.GroupId);
         if (group == null) return RedirectToAction("Error", "Home");
 
         return View(new StudentCabinetViewModel
