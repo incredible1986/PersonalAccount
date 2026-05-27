@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalAccount.Data;
+using PersonalAccount.Data.Entities;
 using PersonalAccount.Mappers;
+using PersonalAccount.Models;
 
 namespace PersonalAccount.Repositories;
 
@@ -9,8 +11,8 @@ public abstract class Repo<TEntity, TModel>(
     IMapper<TEntity, TModel> mapper,
     Func<DbSet<TEntity>> getTable)
     : IRepo<TModel>
-    where TModel : class
-    where TEntity : class
+    where TModel : Model
+    where TEntity : Entity
 {
     protected readonly AppDbContext Context = context;
     protected readonly IMapper<TEntity, TModel> Mapper = mapper;

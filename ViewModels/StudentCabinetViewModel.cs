@@ -1,6 +1,6 @@
 ﻿namespace PersonalAccount.ViewModels;
 
-public class StudentCabinetViewModel
+public class StudentCabinetViewModel : ViewModel
 {
     public string Email { get; set; } = string.Empty;
     public bool IsEmailConfirmed { get; set; }

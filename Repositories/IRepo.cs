@@ -1,6 +1,8 @@
-﻿namespace PersonalAccount.Repositories;
+﻿using PersonalAccount.Models;
 
-public interface IRepo<TModel> where TModel : class
+namespace PersonalAccount.Repositories;
+
+public interface IRepo<TModel> where TModel : Model
 {
     // CREATE
     Task AddAsync(TModel model);
