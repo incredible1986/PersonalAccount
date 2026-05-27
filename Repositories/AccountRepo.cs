@@ -33,4 +33,6 @@ public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountMod
         await Accounts.AddAsync(mapper.ToEntity(account));
         await context.SaveChangesAsync();
     }
+
+    public async Task<bool> AnyAsync() => await Accounts.AnyAsync();
 }

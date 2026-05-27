@@ -9,8 +9,10 @@ using PersonalAccount.ViewModels;
 namespace PersonalAccount.Controllers;
 
 [Authorize(Roles = AccountRoleConstants.Student)]
-public class StudentCabinetController(IStudentCabinetService cabinet, IConfirmationTokenService confirmation)
-    : Controller
+public class StudentCabinetController(
+    IStudentCabinetService cabinetService,
+    IConfirmationTokenService confirmationTokenService
+) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -19,10 +21,10 @@ public class StudentCabinetController(IStudentCabinetService cabinet, IConfirmat
         var accountEmail = User.GetEmail();
         if (accountId == null || accountEmail == null) return RedirectToAction("Error", "Home");
 
-        var student = await cabinet.GetByAccountIdAsync(accountId.Value);
+        var student = await cabinetService.GetByAccountIdAsync(accountId.Value);
         if (student == null) return RedirectToAction("Error", "Home");
 
-        var isEmailConfirmed = await confirmation.HasAnyConfirmedTokenAsync(accountId.Value);
+        var isEmailConfirmed = await confirmationTokenService.HasAnyConfirmedTokenAsync(accountId.Value);
 
         return View(new StudentCabinetViewModel
         {

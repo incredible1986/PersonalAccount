@@ -4,8 +4,10 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Cabinet;
 
-public class AdminCabinetService(IAccountRepo accountRepo, IStudentProfileRepo studentProfileRepo)
-    : IAdminCabinetService
+public class AdminCabinetService(
+    IAccountRepo accountRepo,
+    IStudentProfileRepo studentProfileRepo
+) : IAdminCabinetService
 {
     public async Task<Dictionary<int, AccountModel>> GetAllStudentAccountsAsync()
     {
