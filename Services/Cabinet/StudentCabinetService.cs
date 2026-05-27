@@ -3,8 +3,10 @@ using PersonalAccount.Repositories;
 
 namespace PersonalAccount.Services.Cabinet;
 
-public class StudentCabinetService(IStudentProfileRepo studentProfileRepo) : IStudentCabinetService
+public class StudentCabinetService(IStudentProfileRepo studentProfileRepo, IGroupRepo groupRepo) : IStudentCabinetService
 {
-    public Task<StudentProfileModel?> GetByAccountIdAsync(int accountId) =>
-        studentProfileRepo.GetByAccountIdAsync(accountId);
+    public async Task<StudentProfileModel?> GetByAccountIdAsync(int accountId) =>
+       await studentProfileRepo.GetByAccountIdAsync(accountId);
+
+    public async Task<GroupModel?> GetStudentGroup(int groupId) => await groupRepo.GetByIdAsync(groupId);
 }

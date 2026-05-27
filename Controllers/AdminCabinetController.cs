@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PersonalAccount.Constants;
 using PersonalAccount.Services.Account;
 using PersonalAccount.Services.Cabinet;
 using PersonalAccount.Services.Email;
@@ -18,8 +19,11 @@ public class AdminCabinetController(
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var accounts = await cabinetService.GetAllStudentAccountsAsync();
+        var accounts = (await cabinetService.GetAllStudentAccountsAsync())
+            .ToDictionary(account => account.Id);
         var profiles = await cabinetService.GetAllStudentProfilesAsync();
+        var groups = (await cabinetService.GetAllGroupsAsync())
+            .ToDictionary(group => group.Id);
 
         return View(new AdminCabinetViewModel
         {
@@ -27,7 +31,9 @@ public class AdminCabinetController(
             {
                 Email = accounts[profile.AccountId].Email,
                 FullName = profile.FullName,
-                GroupName = profile.GroupName,
+                GroupName = profile.GroupId == null
+                    ? GroupModelConstants.NoGroup.Name
+                    : groups[profile.GroupId.Value].Name,
                 PhotoUrl = profile.PhotoUrl?.ToString(),
             }).ToList()
         });
@@ -46,7 +52,7 @@ public class AdminCabinetController(
         if (!ModelState.IsValid) return View(model);
 
         var password = await accountService.RegisterAsync(model.Email, AccountRoles.Student);
-        await cabinetService.AddStudentProfileAsync(model.Email, model.FullName, model.GroupName);
+        await cabinetService.AddStudentProfileAsync(model.Email, model.FullName);
         await emailSenderService.SendEmailAsync(model.ContactEmail, "Данные для входа в личный кабинет",
             $"""
              <head></head>

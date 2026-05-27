@@ -16,7 +16,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmationTokenRe
             ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             TokenHash = HashToken(token),
         };
-        await confirmationTokenRepo.CreateAsync(confirmation);
+        await confirmationTokenRepo.AddAsync(confirmation);
         return token;
     }
 

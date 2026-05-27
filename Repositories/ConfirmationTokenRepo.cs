@@ -12,7 +12,7 @@ public class ConfirmationTokenRepo(
 {
     private DbSet<ConfirmationTokenEntity> ConfirmationTokens => context.ConfirmationTokens;
 
-    public async Task CreateAsync(ConfirmationTokenModel token)
+    public async Task AddAsync(ConfirmationTokenModel token)
     {
         await ConfirmationTokens.AddAsync(mapper.ToEntity(token));
         await context.SaveChangesAsync();

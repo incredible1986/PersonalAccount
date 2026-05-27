@@ -1,11 +1,11 @@
 ﻿using PersonalAccount.Models;
-using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Cabinet;
 
 public interface IAdminCabinetService
 {
-    Task<Dictionary<int, AccountModel>> GetAllStudentAccountsAsync();
+    Task<List<AccountModel>> GetAllStudentAccountsAsync();
+    Task<List<GroupModel>> GetAllGroupsAsync();
     Task<List<StudentProfileModel>> GetAllStudentProfilesAsync();
-    Task AddStudentProfileAsync(string email, string fullName, string groupName);
+    Task AddStudentProfileAsync(string email, string fullName);
 }

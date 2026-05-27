@@ -6,18 +6,18 @@ namespace PersonalAccount.Services.Cabinet;
 
 public class AdminCabinetService(
     IAccountRepo accountRepo,
+    IGroupRepo groupRepo,
     IStudentProfileRepo studentProfileRepo
 ) : IAdminCabinetService
 {
-    public async Task<Dictionary<int, AccountModel>> GetAllStudentAccountsAsync()
-    {
-        var studentAccounts = await accountRepo.GetAllByRoleAsync(AccountRoles.Student);
-        return studentAccounts.ToDictionary(account => account.Id);
-    }
+    public async Task<List<AccountModel>> GetAllStudentAccountsAsync() =>
+        await accountRepo.GetAllByRoleAsync(AccountRoles.Student);
+
+    public async Task<List<GroupModel>> GetAllGroupsAsync() => await groupRepo.GetAllAsync();
 
     public async Task<List<StudentProfileModel>> GetAllStudentProfilesAsync() => await studentProfileRepo.GetAllAsync();
 
-    public async Task AddStudentProfileAsync(string email, string fullName, string groupName)
+    public async Task AddStudentProfileAsync(string email, string fullName)
     {
         var account = await accountRepo.GetByEmailAsync(email);
         if (account == null) return;
@@ -25,7 +25,6 @@ public class AdminCabinetService(
         await studentProfileRepo.AddAsync(new StudentProfileModel
         {
             FullName = fullName,
-            GroupName = groupName,
             AccountId = account.Id
         });
     }

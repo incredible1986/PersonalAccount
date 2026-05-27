@@ -55,9 +55,11 @@ namespace PersonalAccount
             builder.Services.AddScoped<IAccountRepo, AccountRepo>();
             builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
+            builder.Services.AddScoped<IGroupRepo, GroupRepo>();
 
             // Mappers
             builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
+            builder.Services.AddSingleton<IMapper<GroupEntity, GroupModel>, GroupMapper>();
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services
                 .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
