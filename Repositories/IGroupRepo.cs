@@ -2,8 +2,4 @@
 
 namespace PersonalAccount.Repositories;
 
-public interface IGroupRepo
-{
-    Task<List<GroupModel>> GetAllAsync();
-    Task<GroupModel?> GetByIdAsync(int id);
-}
+public interface IGroupRepo : IRepo<GroupModel>;

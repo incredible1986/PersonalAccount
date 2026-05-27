@@ -3,11 +3,10 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Repositories
 {
-    public interface IAccountRepo
+    public interface IAccountRepo : IRepo<AccountModel>
     {
         public Task<AccountModel?> GetByEmailAsync(string email);
         public Task<List<AccountModel>> GetAllByRoleAsync(AccountRoles role);
-        public Task AddAsync(AccountModel account);
         public Task<bool> AnyAsync();
     }
 }

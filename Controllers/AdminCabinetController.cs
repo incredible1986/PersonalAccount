@@ -51,6 +51,13 @@ public class AdminCabinetController(
     {
         if (!ModelState.IsValid) return View(model);
 
+        var isAlreadyRegistered = await accountService.IsRegisteredAsync(model.Email);
+        if (isAlreadyRegistered)
+        {
+            ModelState.AddModelError(string.Empty, "Email is already registered");
+            return View(model);
+        }
+        
         var password = await accountService.RegisterAsync(model.Email, AccountRoles.Student);
         await cabinetService.AddStudentProfileAsync(model.Email, model.FullName);
         await emailSenderService.SendEmailAsync(model.ContactEmail, "Данные для входа в личный кабинет",

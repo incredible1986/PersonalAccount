@@ -48,8 +48,14 @@ namespace PersonalAccount.Services.Account
             var password = Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
             account.PasswordHash = hasher.HashPassword(account, password);
             await accountRepo.AddAsync(account);
-            
+
             return password;
+        }
+
+        public async Task<bool> IsRegisteredAsync(string email)
+        {
+            var account = await accountRepo.GetByEmailAsync(email);
+            return account != null;
         }
     }
 }

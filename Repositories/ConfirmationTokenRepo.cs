@@ -8,27 +8,23 @@ namespace PersonalAccount.Repositories;
 
 public class ConfirmationTokenRepo(
     AppDbContext context,
-    IMapper<ConfirmationTokenEntity, ConfirmationTokenModel> mapper) : IConfirmationTokenRepo
+    IMapper<ConfirmationTokenEntity, ConfirmationTokenModel> mapper
+) : Repo<ConfirmationTokenEntity, ConfirmationTokenModel>(context, mapper, () => context.ConfirmationTokens),
+    IConfirmationTokenRepo
 {
-    private DbSet<ConfirmationTokenEntity> ConfirmationTokens => context.ConfirmationTokens;
-
-    public async Task AddAsync(ConfirmationTokenModel token)
-    {
-        await ConfirmationTokens.AddAsync(mapper.ToEntity(token));
-        await context.SaveChangesAsync();
-    }
+    private DbSet<ConfirmationTokenEntity> ConfirmationTokens => Context.ConfirmationTokens;
 
     public async Task<List<ConfirmationTokenModel>> GetByAccountIdAsync(int accountId) =>
         await ConfirmationTokens
             .AsNoTracking()
             .Where(entity => entity.AccountId == accountId)
-            .Select(entity => mapper.ToModel(entity))
+            .Select(entity => Mapper.ToModel(entity))
             .ToListAsync();
 
     public async Task ConfirmByIdAsync(int id)
     {
-       var entity = await ConfirmationTokens.FindAsync(id) ?? throw new KeyNotFoundException();
-       entity.ConfirmedAt = DateTime.UtcNow;
-       await context.SaveChangesAsync();
+        var entity = await ConfirmationTokens.FindAsync(id) ?? throw new KeyNotFoundException();
+        entity.ConfirmedAt = DateTime.UtcNow;
+        await Context.SaveChangesAsync();
     }
 }
