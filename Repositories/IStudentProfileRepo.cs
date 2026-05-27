@@ -6,4 +6,5 @@ public interface IStudentProfileRepo
 {
     Task<StudentProfileModel?> GetByAccountIdAsync(int accountId);
     Task<List<StudentProfileModel>> GetAllAsync();
+    Task AddAsync(StudentProfileModel studentProfile);
 }

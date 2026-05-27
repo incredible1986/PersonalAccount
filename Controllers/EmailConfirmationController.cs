@@ -8,7 +8,7 @@ using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 
-public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSender emailSender) : Controller
+public class EmailConfirmationController(IConfirmationTokenService confirmation, IEmailSenderService emailSenderService) : Controller
 {
     [HttpGet]
     public IActionResult Index(int accountId, string token) => View(new ConfirmEmailViewModel
@@ -41,7 +41,7 @@ public class EmailConfirmationController(IConfirmationTokenService confirmation,
             accountId, token
         }, Request.Scheme);
 
-        await emailSender.SendEmailAsync(accountEmail, "Подтверждение почты", $"""
+        await emailSenderService.SendEmailAsync(accountEmail, "Подтверждение почты", $"""
                                                                                <head></head>
                                                                                <body>
                                                                                <p>{confirmationUrl}</p>

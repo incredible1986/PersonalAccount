@@ -43,7 +43,7 @@ namespace PersonalAccount
             // Services
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
             if (builder.Environment.IsDevelopment())
                 builder.Services.AddScoped<DbBootstrap>();
 

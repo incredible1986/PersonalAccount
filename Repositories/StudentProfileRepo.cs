@@ -25,4 +25,10 @@ public class StudentProfileRepo(AppDbContext context, IMapper<StudentProfileEnti
             .AsNoTracking()
             .Select(entity => mapper.ToModel(entity))
             .ToListAsync();
+
+    public async Task AddAsync(StudentProfileModel studentProfile)
+    {
+        await StudentProfiles.AddAsync(mapper.ToEntity(studentProfile));
+        await context.SaveChangesAsync();
+    }
 }
