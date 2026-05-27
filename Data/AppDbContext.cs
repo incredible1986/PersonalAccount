@@ -6,6 +6,7 @@ namespace PersonalAccount.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<AccountEntity> Accounts => Set<AccountEntity>();
+    public DbSet<GroupEntity> Groups => Set<GroupEntity>();
     public DbSet<StudentProfileEntity> StudentProfiles => Set<StudentProfileEntity>();
     public DbSet<ConfirmationTokenEntity> ConfirmationTokens => Set<ConfirmationTokenEntity>();
 
@@ -20,51 +21,78 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasKey(account => account.Id);
             entity.HasIndex(account => account.Email)
                 .IsUnique();
-            
+
             entity.Property(account => account.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
-            
+
             entity.Property(account => account.Role)
                 .HasColumnName("role")
                 .IsRequired();
-            
+
             entity.Property(account => account.Email)
                 .HasColumnName("email")
                 .HasMaxLength(255)
                 .IsRequired();
-   
+
             entity.Property(account => account.PasswordHash)
                 .HasColumnName("password_hash")
                 .IsRequired();
         });
 
+        builder.Entity<GroupEntity>(entity =>
+        {
+            entity.ToTable("groups");
+            entity.HasKey(group => group.Id);
+
+            entity.Property(group => group.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
+            entity.Property(group => group.Name)
+                .HasColumnName("name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(group => group.Description)
+                .HasColumnName("description")
+                .HasMaxLength(2047)
+                .IsRequired();
+
+            entity.Property(group => group.ImageUrl)
+                .HasColumnName("image_url")
+                .HasMaxLength(2047);
+
+            entity.HasMany(group => group.StudentProfiles)
+                .WithOne(group => group.Group)
+                .HasForeignKey(group => group.GroupId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
         builder.Entity<StudentProfileEntity>(entity =>
         {
             entity.ToTable("student_profiles");
-
             entity.HasKey(student => student.Id);
+            entity.HasIndex(student => student.AccountId).IsUnique();
+
             entity.Property(student => student.Id)
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
-            
+
             entity.Property(student => student.AccountId)
                 .HasColumnName("account_id")
                 .IsRequired();
+
+            entity.Property(student => student.GroupId)
+                .HasColumnName("group_id");
 
             entity.Property(student => student.FullName)
                 .HasColumnName("full_name")
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(student => student.GroupName)
-                .HasColumnName("group_name")
-                .HasMaxLength(255)
-                .IsRequired();
-
             entity.Property(student => student.PhotoUrl)
                 .HasColumnName("photo_url");
-            
+
             entity.HasOne(student => student.Account)
                 .WithOne(student => student.StudentProfile)
                 .HasForeignKey<StudentProfileEntity>(student => student.AccountId)
