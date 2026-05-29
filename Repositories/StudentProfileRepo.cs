@@ -19,4 +19,13 @@ public class StudentProfileRepo(AppDbContext context, IMapper<StudentProfileEnti
         
         return entity == null ? null : mapper.ToModel(entity);
     }
+
+    public async Task<List<StudentProfileModel>> GetAllAsync()
+    {
+        var entities = await StudentProfiles
+            .AsNoTracking()
+            .ToListAsync();
+
+        return entities.Select(entity => mapper.ToModel(entity)).ToList();
+    }
 }

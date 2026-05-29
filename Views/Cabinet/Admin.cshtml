@@ -1,0 +1,50 @@
+﻿@model AdminCabinetViewModel
+
+<h1>Кабинет администратора</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Фото</th>
+            <th>ФИО</th>
+            <th>Группа</th>
+            <th>Почта</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(student.PhotoUrl))
+                    {
+                        <img src="@student.PhotoUrl" alt="@student.FullName" style="max-width: 50px;" />
+                    }
+                </td>
+                <td>@student.FullName</td>
+                <td>@student.GroupName</td>
+                <td>
+                    @if (student.IsEmailConfirmed)
+                    {
+                        <span class="text-success">Почта подтверждена</span>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Почта не подтверждена</span>
+                    }
+                </td>
+                <td>
+                    @if (!student.IsEmailConfirmed)
+                    {
+                        <form method="post" asp-action="ConfirmStudentEmail" asp-controller="Cabinet">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@student.AccountId" />
+                            <button type="submit" class="btn btn-primary btn-sm">Подтвердить почту</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
