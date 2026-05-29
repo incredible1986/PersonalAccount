@@ -4,13 +4,28 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Cabinet;
 
-public class AdminCabinetService(IAccountRepo accounts, IStudentProfileRepo studentProfiles) : IAdminCabinetService
+public class AdminCabinetService(
+    IAccountRepo accountRepo,
+    IGroupRepo groupRepo,
+    IStudentProfileRepo studentProfileRepo
+) : IAdminCabinetService
 {
-    public async Task<Dictionary<int, AccountModel>> GetAllStudentAccounts()
-    {
-        var studentAccounts = await accounts.GetAllByRoleAsync(AccountRoles.Student);
-        return studentAccounts.ToDictionary(account => account.Id);
-    }
+    public async Task<List<AccountModel>> GetAllStudentAccountsAsync() =>
+        await accountRepo.GetAllByRoleAsync(AccountRoles.Student);
 
-    public async Task<List<StudentProfileModel>> GetAllStudentProfiles() => await studentProfiles.GetAllAsync();
+    public async Task<List<GroupModel>> GetAllGroupsAsync() => await groupRepo.GetAllAsync();
+
+    public async Task<List<StudentProfileModel>> GetAllStudentProfilesAsync() => await studentProfileRepo.GetAllAsync();
+
+    public async Task AddStudentProfileAsync(string email, string fullName)
+    {
+        var account = await accountRepo.GetByEmailAsync(email);
+        if (account == null) return;
+
+        await studentProfileRepo.AddAsync(new StudentProfileModel
+        {
+            FullName = fullName,
+            AccountId = account.Id
+        });
+    }
 }

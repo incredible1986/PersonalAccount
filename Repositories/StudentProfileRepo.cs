@@ -7,9 +7,10 @@ using PersonalAccount.Models;
 namespace PersonalAccount.Repositories;
 
 public class StudentProfileRepo(AppDbContext context, IMapper<StudentProfileEntity, StudentProfileModel> mapper)
-    : IStudentProfileRepo
+    : Repo<StudentProfileEntity, StudentProfileModel>(context, mapper, () => context.StudentProfiles),
+        IStudentProfileRepo
 {
-    private DbSet<StudentProfileEntity> StudentProfiles => context.StudentProfiles;
+    private DbSet<StudentProfileEntity> StudentProfiles => Context.StudentProfiles;
 
     public async Task<StudentProfileModel?> GetByAccountIdAsync(int accountId)
     {
@@ -17,12 +18,6 @@ public class StudentProfileRepo(AppDbContext context, IMapper<StudentProfileEnti
             .AsNoTracking()
             .FirstOrDefaultAsync(entity => entity.AccountId == accountId);
 
-        return entity == null ? null : mapper.ToModel(entity);
+        return entity == null ? null : Mapper.ToModel(entity);
     }
-
-    public async Task<List<StudentProfileModel>> GetAllAsync() =>
-        await StudentProfiles
-            .AsNoTracking()
-            .Select(entity => mapper.ToModel(entity))
-            .ToListAsync();
 }

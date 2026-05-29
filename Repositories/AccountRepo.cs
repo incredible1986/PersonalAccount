@@ -7,16 +7,17 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Repositories;
 
-public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountModel> mapper) : IAccountRepo
+public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountModel> mapper)
+    : Repo<AccountEntity, AccountModel>(context, mapper, () => context.Accounts), IAccountRepo
 {
-    private DbSet<AccountEntity> Accounts => context.Accounts;
+    private DbSet<AccountEntity> Accounts => Context.Accounts;
 
     public async Task<AccountModel?> GetByEmailAsync(string email)
     {
         var entity = await Accounts
             .AsNoTracking()
             .FirstOrDefaultAsync(entity => entity.Email == email);
-        return entity == null ? null : mapper.ToModel(entity);
+        return entity == null ? null : Mapper.ToModel(entity);
     }
 
     public async Task<List<AccountModel>> GetAllByRoleAsync(AccountRoles role)
@@ -24,13 +25,11 @@ public class AccountRepo(AppDbContext context, IMapper<AccountEntity, AccountMod
         return await Accounts
             .AsNoTracking()
             .Where(entity => entity.Role == role)
-            .Select(entity => mapper.ToModel(entity))
+            .Select(entity => Mapper.ToModel(entity))
             .ToListAsync();
     }
 
-    public async Task AddAsync(AccountModel account)
-    {
-        await Accounts.AddAsync(mapper.ToEntity(account));
-        await context.SaveChangesAsync();
-    }
+    public async Task<bool> AnyAsync() => await Accounts.AnyAsync();
+
+    
 }

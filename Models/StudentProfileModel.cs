@@ -1,11 +1,12 @@
-﻿namespace PersonalAccount.Models;
+﻿using PersonalAccount.Constants;
 
-public class StudentProfileModel
+namespace PersonalAccount.Models;
+
+public class StudentProfileModel : Model
 {
-    public int Id { get; set; }
     public int AccountId { get; set; }
+    public int GroupId { get; set; } = GroupConstants.NoGroupId;
 
     public string FullName { get; set; } = string.Empty;
-    public string GroupName { get; set; } = string.Empty;
     public Uri? PhotoUrl { get; set; }
 }

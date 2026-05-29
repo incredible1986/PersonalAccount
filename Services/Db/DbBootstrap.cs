@@ -1,52 +1,51 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using PersonalAccount.Data;
-using PersonalAccount.Data.Entities;
-using PersonalAccount.Mappers;
+using PersonalAccount.Constants;
 using PersonalAccount.Models;
-using PersonalAccount.Utils;
+using PersonalAccount.Repositories;
+using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Db;
 
 public class DbBootstrap(
-    AppDbContext context,
+    IAccountRepo accountRepo,
+    IGroupRepo groupRepo,
     IPasswordHasher<AccountModel> hasher,
-    IMapper<AccountEntity, AccountModel> accountMapper,
-    IMapper<StudentProfileEntity, StudentProfileModel> studentProfileMapper,
     IOptions<DbBootstrapSettings> options)
 {
     private readonly DbBootstrapSettings _settings = options.Value;
 
     public async Task SeedAsync()
     {
-        await context.Database.MigrateAsync();
-        var hasStudents = await context.StudentProfiles.AnyAsync();
-        if (hasStudents) return;
+        await Task.WhenAll(
+            InitAccountAsync(),
+            InitGroupAsync()
+        );
+    }
+
+    private async Task InitAccountAsync()
+    {
+        var hasAccounts = await accountRepo.AnyAsync();
+        if (hasAccounts) return;
 
         var account = new AccountModel
         {
-            Email = _settings.Email
+            Email = _settings.Email,
+            Role = AccountRoles.Administrator
         };
+        account.PasswordHash = hasher.HashPassword(account, _settings.Password);
+        await accountRepo.AddAsync(account);
+    }
 
-        var accountEntity = accountMapper.ToEntity(account);
-        accountEntity.PasswordHash = hasher.HashPassword(account, _settings.Password);
+    private async Task InitGroupAsync()
+    {
+        var noGroup = await groupRepo.GetByIdAsync(GroupConstants.NoGroupId);
+        if (noGroup != null) return;
 
-        await context.Accounts.AddAsync(accountEntity);
-        await context.SaveChangesAsync();
-
-        accountEntity = await context.Accounts.AsNoTracking()
-            .FirstOrDefaultAsync(entity => entity.Email == account.Email) ?? throw new InvalidOperationException();
-
-        var studentProfile = new StudentProfileModel
+        var group = new GroupModel
         {
-            AccountId = accountEntity.Id,
-            FullName = "John Doe",
-            GroupName = "PD-412",
-            PhotoUrl = "https://masterpiecer-images.s3.yandex.net/5fd531dca6427c7:upscaled".ToUri(),
+            Id = GroupConstants.NoGroupId,
         };
-        var studentProfileEntity = studentProfileMapper.ToEntity(studentProfile);
-        await context.StudentProfiles.AddAsync(studentProfileEntity);
-        await context.SaveChangesAsync();
+        await groupRepo.AddAsync(group);
     }
 }
