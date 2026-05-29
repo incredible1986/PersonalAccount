@@ -76,6 +76,7 @@ public class CabinetController : Controller
                 var isConfirmed = await _confirmation.HasAnyConfirmedTokenAsync(profile.AccountId);
                 students.Add(new AdminCabinetStudentViewModel
                 {
+                    AccountId = profile.AccountId,
                     FullName = profile.FullName,
                     GroupName = profile.GroupName,
                     PhotoUrl = profile.PhotoUrl?.ToString(),

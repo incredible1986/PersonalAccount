@@ -11,8 +11,7 @@ namespace PersonalAccount.Services.Db;
 public class DbSeeder(
     AppDbContext context,
     IPasswordHasher<AccountModel> hasher,
-    IMapper<AccountEntity, AccountModel> accountMapper,
-    IMapper<StudentProfileEntity, StudentProfileModel> studentProfileMapper)
+    IMapper<AccountEntity, AccountModel> accountMapper)
 {
     public async Task SeedAsync()
     {
