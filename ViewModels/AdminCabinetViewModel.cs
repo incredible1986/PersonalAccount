@@ -1,10 +1,8 @@
 ﻿namespace PersonalAccount.ViewModels;
 
-public class AdminCabinetGroupViewModel : ViewModel
+public class AdminCabinetGroupViewModel : CabinetGroupViewModel
 {
-    public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string? ImageUrl { get; set; }
 }
 
 public class AdminCabinetStudentViewModel : ViewModel
@@ -16,7 +14,7 @@ public class AdminCabinetStudentViewModel : ViewModel
 
 public class AdminCabinetViewModel : ViewModel
 {
-    public List<int> GroupsOrder { get; set; } = [];
+    public List<int> GroupIdsOrder { get; set; } = [];
     public Dictionary<int, AdminCabinetGroupViewModel> Groups { get; set; } = [];
     public Dictionary<int, List<AdminCabinetStudentViewModel>> StudentProfiles { get; set; } = [];
 }

@@ -10,7 +10,7 @@
     </header>
 
     <div class="container d-flex flex-column align-items-stretch gap-5">
-        @foreach (var groupId in Model.GroupsOrder)
+        @foreach (var groupId in Model.GroupIdsOrder)
         {
             var group = Model.Groups[groupId];
             var students = Model.StudentProfiles[groupId];

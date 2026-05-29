@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TeacherCabinetViewModel
+@{
     ViewData["Title"] = "Личный кабинет";
 }
 
@@ -6,4 +7,33 @@
     <header class="mb-3">
         <h1 class="text-start text-uppercase">Личный кабинет преподавателя</h1>
     </header>
+    <div class="container d-flex flex-column align-items-stretch gap-5">
+        @foreach (var disciplineId in Model.DisciplineIdsOrder)
+        {
+            var discipline = Model.Disciplines[disciplineId];
+            var groups = Model.Groups[disciplineId];
+            <div class="w-100 d-flex flex-column align-items-stretch gap-2">
+                <div class="card d-flex align-content-center justify-content-center"
+                     style="height: 50px;">
+                    <header class="text-center ">
+                        <h3>@discipline.Name</h3>
+                    </header>
+                </div>
+                <div class="container d-flex flex-wrap gap-2">
+                    @foreach (var group in groups)
+                    {
+                        <div class="card d-flex align-content-center justify-content-center text-white" style="
+                            width: 300px;
+                            height: 120px;
+                            background-image: url(@group.ImageUrl);
+                        background-size: cover;">
+                            <span class="text-center">
+                                <h3>@discipline.Name</h3>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 </div>
