@@ -2,4 +2,4 @@
 
 namespace PersonalAccount.Repositories;
 
-public interface IStudentProfileRepo : IProfileRepo<StudentProfileModel>;
+public interface IDisciplineRepo : IRepo<DisciplineModel>;

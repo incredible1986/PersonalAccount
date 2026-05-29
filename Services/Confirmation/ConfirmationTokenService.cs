@@ -22,7 +22,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmationTokenRe
 
     public async Task<bool> ValidateTokenAsync(int accountId, string token)
     {
-        var confirmationTokens = await confirmationTokenRepo.GetByAccountIdAsync(accountId);
+        var confirmationTokens = await confirmationTokenRepo.GetAllByAccountIdAsync(accountId);
         var tokenHash = HashToken(token);
         var confirmation = confirmationTokens.FirstOrDefault(confirmation =>
             confirmation.TokenHash == tokenHash
@@ -32,7 +32,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmationTokenRe
 
         try
         {
-            await confirmationTokenRepo.ConfirmByIdAsync(confirmation.Id);
+            await confirmationTokenRepo.ConfirmByIdAsync(confirmation.Id, DateTime.UtcNow);
             return true;
         }
         catch
@@ -43,7 +43,7 @@ public class ConfirmationTokenService(IConfirmationTokenRepo confirmationTokenRe
 
     public async Task<bool> HasAnyConfirmedTokenAsync(int accountId)
     {
-        var confirmationTokens = await confirmationTokenRepo.GetByAccountIdAsync(accountId);
+        var confirmationTokens = await confirmationTokenRepo.GetAllByAccountIdAsync(accountId);
         return confirmationTokens.Any(confirmation => confirmation.ConfirmedAt != null);
     }
 
