@@ -45,7 +45,7 @@ namespace PersonalAccount.Controllers
 
         public IActionResult AccessDenied()
         {
-            throw new NotImplementedException();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
