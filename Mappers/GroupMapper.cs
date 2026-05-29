@@ -4,23 +4,25 @@ using PersonalAccount.Utils;
 
 namespace PersonalAccount.Mappers;
 
-public class GroupMapper : IMapper<GroupEntity, GroupModel>
+public class GroupMapper : Mapper<GroupEntity, GroupModel>
 {
-    public GroupEntity ToEntity(GroupModel model) =>
-        new()
-        {
-            Id = model.Id,
-            Name = model.Name,
-            Description = model.Description,
-            ImageUrl = model.ImageUrl?.ToString()
-        };
+    public override GroupEntity ToEntity(GroupModel model)
+    {
+        var entity = base.ToEntity(model);
+        entity.Id = model.Id;
+        entity.Name = model.Name;
+        entity.Description = model.Description;
+        entity.ImageUrl = model.ImageUrl?.ToString();
+        return entity;
+    }
 
-    public GroupModel ToModel(GroupEntity entity) =>
-        new()
-        {
-            Id = entity.Id,
-            Name = entity.Name,
-            Description = entity.Description,
-            ImageUrl = entity.ImageUrl?.ToUri()
-        };
+    public override GroupModel ToModel(GroupEntity entity)
+    {
+        var model = base.ToModel(entity);
+        model.Id = entity.Id;
+        model.Name = entity.Name;
+        model.Description = entity.Description;
+        model.ImageUrl = entity.ImageUrl?.ToUri();
+        return model;
+    }
 }

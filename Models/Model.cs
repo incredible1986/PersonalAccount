@@ -1,6 +1,6 @@
 ﻿namespace PersonalAccount.Models;
 
-public class Model
+public abstract class Model
 {
     public int Id { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿namespace PersonalAccount.Data.Entities;
 
-public class ProfileEntity : Entity
+public abstract class ProfileEntity : Entity
 {
     public int AccountId { get; set; }
     public AccountEntity? Account { get; set; }
