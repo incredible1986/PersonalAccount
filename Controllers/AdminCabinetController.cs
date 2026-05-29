@@ -9,7 +9,7 @@ using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 
-[Authorize(Roles = AccountRoleConstants.Administrator)]
+[Authorize(Roles = AccountRoleConstants.Admin)]
 public class AdminCabinetController(
     IAdminCabinetService cabinetService,
     IAccountService accountService,

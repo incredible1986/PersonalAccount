@@ -14,11 +14,6 @@ public class CabinetController : Controller
         var role = User.GetRole();
         if (role == null) return Forbid();
 
-        return role.Value switch
-        {
-            AccountRoles.Administrator => RedirectToAction("Index", "AdminCabinet"),
-            AccountRoles.Student => RedirectToAction("Index", "StudentCabinet"),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        return RedirectToAction("Index", $"{role.Value.ToString()}Cabinet");
     }
 }

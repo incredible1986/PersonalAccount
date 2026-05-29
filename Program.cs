@@ -45,7 +45,7 @@ namespace PersonalAccount
             builder.Services.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
             builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
             if (builder.Environment.IsDevelopment())
-                builder.Services.AddScoped<DbBootstrap>();
+                builder.Services.AddScoped<DbBootstrapService>();
 
             // Cabinet Services
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
@@ -73,7 +73,7 @@ namespace PersonalAccount
             if (app.Environment.IsDevelopment())
             {
                 using var scope = app.Services.CreateScope();
-                var seeder = scope.ServiceProvider.GetRequiredService<DbBootstrap>();
+                var seeder = scope.ServiceProvider.GetRequiredService<DbBootstrapService>();
                 await seeder.SeedAsync();
             }
             else
