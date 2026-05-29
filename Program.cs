@@ -16,7 +16,7 @@ namespace PersonalAccount
 {
     public class Program
     {
-        public async static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -54,13 +54,19 @@ namespace PersonalAccount
             // Repositories
             builder.Services.AddScoped<IAccountRepo, AccountRepo>();
             builder.Services.AddScoped<IStudentProfileRepo, StudentProfileRepo>();
+            builder.Services.AddScoped<ITeacherProfileRepo, TeacherProfileRepo>();
             builder.Services.AddScoped<IConfirmationTokenRepo, ConfirmationTokenRepo>();
             builder.Services.AddScoped<IGroupRepo, GroupRepo>();
+            builder.Services.AddScoped<IDisciplineRepo, DisciplineRepo>();
+            builder.Services.AddScoped<ITeacherGroupDisciplineRepo, TeacherGroupDisciplineRepo>();
 
             // Mappers
             builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
             builder.Services.AddSingleton<IMapper<GroupEntity, GroupModel>, GroupMapper>();
+            builder.Services.AddSingleton<IMapper<DisciplineEntity, DisciplineModel>, DisciplineMapper>();
+            builder.Services.AddSingleton<IMapper<TeacherGroupDisciplineEntity, TeacherGroupDisciplineModel>, TeacherGroupDisciplineMapper>();
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
+            builder.Services.AddSingleton<IMapper<TeacherProfileEntity, TeacherProfileModel>, TeacherProfileMapper>();
             builder.Services
                 .AddSingleton<IMapper<ConfirmationTokenEntity, ConfirmationTokenModel>, ConfirmationTokenMapper>();
 
