@@ -5,6 +5,7 @@
     public string GroupName { get; set; } = string.Empty;
 
     public string? PhotoUrl { get; set; }
+    public bool IsEmailConfirmed { get; set; }
 }
 
 public class AdminCabinetViewModel
