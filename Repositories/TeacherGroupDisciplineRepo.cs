@@ -10,4 +10,14 @@ public class TeacherGroupDisciplineRepo(
     IMapper<TeacherGroupDisciplineEntity, TeacherGroupDisciplineModel> mapper
 ) : Repo<TeacherGroupDisciplineEntity, TeacherGroupDisciplineModel>(context, mapper,
         ctx => ctx.TeacherGroupDisciplines),
-    ITeacherGroupDisciplineRepo;
+    ITeacherGroupDisciplineRepo
+{
+    public async Task<List<TeacherGroupDisciplineModel>> GetAllByTeacherAccountIdAsync(int teacherAccountId) =>
+        await GetAllByAsync(entity => entity.TeacherAccountId == teacherAccountId);
+
+    public async Task<List<TeacherGroupDisciplineModel>> GetAllByTeacherAccountIdAndDisciplineIdAsync(
+        int teacherAccountId,
+        int disciplineId
+    ) => await GetAllByAsync(entity => entity.TeacherAccountId == teacherAccountId &&
+                                       entity.DisciplineId == disciplineId);
+}

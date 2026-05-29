@@ -49,6 +49,7 @@ namespace PersonalAccount
 
             // Cabinet Services
             builder.Services.AddScoped<IStudentCabinetService, StudentCabinetService>();
+            builder.Services.AddScoped<ITeacherCabinetService, TeacherCabinetService>();
             builder.Services.AddScoped<IAdminCabinetService, AdminCabinetService>();
 
             // Repositories
@@ -64,7 +65,9 @@ namespace PersonalAccount
             builder.Services.AddSingleton<IMapper<AccountEntity, AccountModel>, AccountMapper>();
             builder.Services.AddSingleton<IMapper<GroupEntity, GroupModel>, GroupMapper>();
             builder.Services.AddSingleton<IMapper<DisciplineEntity, DisciplineModel>, DisciplineMapper>();
-            builder.Services.AddSingleton<IMapper<TeacherGroupDisciplineEntity, TeacherGroupDisciplineModel>, TeacherGroupDisciplineMapper>();
+            builder.Services
+                .AddSingleton<IMapper<TeacherGroupDisciplineEntity, TeacherGroupDisciplineModel>,
+                    TeacherGroupDisciplineMapper>();
             builder.Services.AddSingleton<IMapper<StudentProfileEntity, StudentProfileModel>, StudentProfileMapper>();
             builder.Services.AddSingleton<IMapper<TeacherProfileEntity, TeacherProfileModel>, TeacherProfileMapper>();
             builder.Services
