@@ -73,11 +73,13 @@ public class CabinetController : Controller
         {
             if (accounts.TryGetValue(profile.AccountId, out var account))
             {
+                var isConfirmed = await _confirmation.HasAnyConfirmedTokenAsync(profile.AccountId);
                 students.Add(new AdminCabinetStudentViewModel
                 {
                     FullName = profile.FullName,
                     GroupName = profile.GroupName,
-                    PhotoUrl = profile.PhotoUrl?.ToString()
+                    PhotoUrl = profile.PhotoUrl?.ToString(),
+                    IsEmailConfirmed = isConfirmed
                 });
             }
         }
