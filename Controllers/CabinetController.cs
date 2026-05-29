@@ -89,4 +89,13 @@ public class CabinetController : Controller
             Students = students
         });
     }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmStudentEmail(int id)
+    {
+        await _adminCabinet.ConfirmStudentEmailAsync(id);
+        return RedirectToAction("Admin");
+    }
 }
