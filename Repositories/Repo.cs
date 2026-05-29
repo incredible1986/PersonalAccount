@@ -9,7 +9,7 @@ namespace PersonalAccount.Repositories;
 public abstract class Repo<TEntity, TModel>(
     AppDbContext context,
     IMapper<TEntity, TModel> mapper,
-    Func<DbSet<TEntity>> getTable)
+    Func<DbSet<TEntity>> tableSelector)
     : IRepo<TModel>
     where TModel : Model
     where TEntity : Entity
@@ -17,7 +17,7 @@ public abstract class Repo<TEntity, TModel>(
     protected readonly AppDbContext Context = context;
     protected readonly IMapper<TEntity, TModel> Mapper = mapper;
 
-    private DbSet<TEntity> Table => getTable();
+    private DbSet<TEntity> Table => tableSelector();
 
     public async Task AddAsync(TModel model)
     {
