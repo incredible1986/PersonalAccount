@@ -5,25 +5,19 @@ using PersonalAccount.Utils;
 
 namespace PersonalAccount.Mappers;
 
-public class StudentProfileMapper : IMapper<StudentProfileEntity, StudentProfileModel>
+public class StudentProfileMapper : ProfileMapper<StudentProfileEntity, StudentProfileModel>
 {
-    public StudentProfileEntity ToEntity(StudentProfileModel model) =>
-        new()
-        {
-            Id = model.Id,
-            AccountId = model.AccountId,
-            GroupId = model.GroupId == GroupConstants.NoGroupId ? null : model.GroupId,
-            FullName = model.FullName,
-            PhotoUrl = model.PhotoUrl?.ToString()
-        };
+    public override StudentProfileEntity ToEntity(StudentProfileModel model)
+    {
+        var entity = base.ToEntity(model);
+        entity.GroupId = model.GroupId == GroupConstants.NoGroupId ? null : model.GroupId;
+        return entity;
+    }
 
-    public StudentProfileModel ToModel(StudentProfileEntity entity) =>
-        new()
-        {
-            Id = entity.Id,
-            AccountId = entity.AccountId,
-            GroupId = entity.GroupId ?? GroupConstants.NoGroupId,
-            FullName = entity.FullName,
-            PhotoUrl = entity.PhotoUrl?.ToUri()
-        };
+    public override StudentProfileModel ToModel(StudentProfileEntity entity)
+    {
+        var model = base.ToModel(entity);
+        model.GroupId = entity.GroupId ?? GroupConstants.NoGroupId;
+        return model;
+    }
 }

@@ -7,7 +7,7 @@ using PersonalAccount.Types;
 
 namespace PersonalAccount.Services.Db;
 
-public class DbBootstrap(
+public class DbBootstrapService(
     IAccountRepo accountRepo,
     IGroupRepo groupRepo,
     IPasswordHasher<AccountModel> hasher,
@@ -31,7 +31,7 @@ public class DbBootstrap(
         var account = new AccountModel
         {
             Email = _settings.Email,
-            Role = AccountRoles.Administrator
+            Role = AccountRoles.Admin
         };
         account.PasswordHash = hasher.HashPassword(account, _settings.Password);
         await accountRepo.AddAsync(account);

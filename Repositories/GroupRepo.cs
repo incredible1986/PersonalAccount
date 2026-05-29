@@ -6,4 +6,4 @@ using PersonalAccount.Models;
 namespace PersonalAccount.Repositories;
 
 public class GroupRepo(AppDbContext context, IMapper<GroupEntity, GroupModel> mapper)
-    : Repo<GroupEntity, GroupModel>(context, mapper, () => context.Groups), IGroupRepo;
+    : Repo<GroupEntity, GroupModel>(context, mapper, ctx => ctx.Groups), IGroupRepo;

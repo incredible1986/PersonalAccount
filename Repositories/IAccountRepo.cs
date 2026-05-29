@@ -7,6 +7,5 @@ namespace PersonalAccount.Repositories
     {
         public Task<AccountModel?> GetByEmailAsync(string email);
         public Task<List<AccountModel>> GetAllByRoleAsync(AccountRoles role);
-        public Task<bool> AnyAsync();
     }
 }

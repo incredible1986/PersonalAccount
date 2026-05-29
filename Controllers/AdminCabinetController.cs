@@ -9,7 +9,7 @@ using PersonalAccount.ViewModels;
 
 namespace PersonalAccount.Controllers;
 
-[Authorize(Roles = AccountRoleConstants.Administrator)]
+[Authorize(Roles = AccountRoleConstants.Admin)]
 public class AdminCabinetController(
     IAdminCabinetService cabinetService,
     IAccountService accountService,
@@ -27,7 +27,7 @@ public class AdminCabinetController(
 
         return View(new AdminCabinetViewModel
         {
-            GroupsOrder = groups.OrderBy(group => group.Name).Select(group => group.Id).ToList(),
+            GroupIdsOrder = groups.OrderBy(group => group.Name).Select(group => group.Id).ToList(),
             Groups = groupsDictionary.Select(group => (group.Key, new AdminCabinetGroupViewModel
             {
                 Name = group.Value.Name,

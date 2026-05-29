@@ -2,7 +2,7 @@
 
 public enum AccountRoles
 {
-    Administrator,
+    Admin,
     Teacher,
     Student,
 }
