@@ -1,6 +1,7 @@
 ﻿using PersonalAccount.Models;
 using PersonalAccount.Repositories;
 using PersonalAccount.Types;
+using PersonalAccount.Utils;
 
 namespace PersonalAccount.Services.Cabinet;
 
@@ -47,6 +48,16 @@ public class AdminCabinetService(
         {
             FullName = fullName,
             AccountId = account.Id
+        });
+    }
+
+    public async Task AddGroupAsync(string name, string description, string? imageUrl)
+    {
+        await groupRepo.AddAsync(new GroupModel
+        {
+            Name = name,
+            Description = description,
+            ImageUrl = imageUrl?.ToUri()
         });
     }
 }

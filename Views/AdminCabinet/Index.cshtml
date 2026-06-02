@@ -9,6 +9,34 @@
         <h1 class="text-start text-uppercase">Панель администратора</h1>
     </header>
 
+    <!-- ГРУППЫ -->
+    <div class="container d-flex justify-content-between align-items-start gap-3">
+        <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
+            <header class="text-primary">
+                <h2>Группы</h2>
+            </header>
+            <div class="d-flex flex-wrap align-items-start gap-3">
+                @foreach (var group in Model.Groups)
+                {
+                    <div class="card" style="width: 200px">
+                        @if (group.ImageUrl != null)
+                        {
+                            <img class="card-img-top" src="@group.ImageUrl" alt="@group.Name"/>
+                        }
+                        <div class="card-body">
+                            <h5>@group.Name</h5>
+                            <p class="small text-muted">@group.Description</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <form method="get" asp-action="AddGroup">
+            <button class="btn btn-outline-primary w-100 h-100">Добавить группу</button>
+        </form>
+    </div>
+
+    <!-- СТУДЕНТЫ -->
     <div class="container d-flex justify-content-between align-items-start gap-3">
         <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
             <header class="text-primary">
@@ -31,11 +59,12 @@
                 }
             </div>
         </div>
-
         <form method="get" asp-action="AddStudent">
             <button class="btn btn-outline-primary w-100 h-100">Зарегистрировать нового студента</button>
         </form>
     </div>
+
+    <!-- ПРЕПОДАВАТЕЛИ -->
     <div class="container d-flex justify-content-between align-items-start gap-3">
         <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
             <header class="text-primary">
@@ -61,7 +90,6 @@
                 }
             </div>
         </div>
-
         <form method="get" asp-action="AddTeacher">
             <button class="btn btn-outline-primary w-100 h-100">Зарегистрировать нового преподавателя</button>
         </form>

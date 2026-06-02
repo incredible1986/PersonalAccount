@@ -29,6 +29,13 @@ public class AdminCabinetController(
 
         return View(new AdminCabinetViewModel
         {
+            Groups = groups.Select(group => new AdminCabinetGroupViewModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                Description = group.Description,
+                ImageUrl = group.ImageUrl?.ToString()
+            }).ToList(),
             Teachers = teacherProfiles
                 .OrderBy(teacherProfile => teacherProfile.FullName)
                 .Select(teacherProfile =>
@@ -159,5 +166,21 @@ public class AdminCabinetController(
     {
         await adminCabinetService.AddTeacherGroupDisciplineAsync(teacherAccountId, groupId, disciplineId);
         return RedirectToAction("EditTeacher", new { teacherAccountId });
+    }
+
+    [HttpGet]
+    public IActionResult AddGroup()
+    {
+        return View(new AddGroupViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddGroup(AddGroupViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        await adminCabinetService.AddGroupAsync(model.Name, model.Description ?? string.Empty, model.ImageUrl);
+        return RedirectToAction("Index");
     }
 }
