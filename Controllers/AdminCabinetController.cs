@@ -26,6 +26,7 @@ public class AdminCabinetController(
         var teacherProfiles = await adminCabinetService.GetAllTeacherProfilesAsync();
         var groups = await adminCabinetService.GetAllGroupsAsync();
         var groupsDictionary = groups.ToDictionary(group => group.Id);
+        var disciplines = await adminCabinetService.GetAllDisciplinesAsync();
 
         return View(new AdminCabinetViewModel
         {
@@ -35,6 +36,11 @@ public class AdminCabinetController(
                 Name = group.Name,
                 Description = group.Description,
                 ImageUrl = group.ImageUrl?.ToString()
+            }).ToList(),
+            Disciplines = disciplines.Select(d => new AdminCabinetDisciplineViewModel
+            {
+                Id = d.Id,
+                Name = d.Name
             }).ToList(),
             Teachers = teacherProfiles
                 .OrderBy(teacherProfile => teacherProfile.FullName)
@@ -181,6 +187,21 @@ public class AdminCabinetController(
         if (!ModelState.IsValid) return View(model);
 
         await adminCabinetService.AddGroupAsync(model.Name, model.Description ?? string.Empty, model.ImageUrl);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult AddDiscipline()
+    {
+        return View(new AddDisciplineViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddDiscipline(AddDisciplineViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+        await adminCabinetService.AddDisciplineAsync(model.Name);
         return RedirectToAction("Index");
     }
 }

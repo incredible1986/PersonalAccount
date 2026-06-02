@@ -8,6 +8,7 @@ namespace PersonalAccount.Services.Cabinet;
 public class AdminCabinetService(
     IAccountRepo accountRepo,
     IGroupRepo groupRepo,
+    IDisciplineRepo disciplineRepo,
     IStudentProfileRepo studentProfileRepo,
     ITeacherProfileRepo teacherProfileRepo,
     ITeacherGroupDisciplineRepo teacherGroupDisciplineRepo
@@ -20,6 +21,7 @@ public class AdminCabinetService(
 
     public async Task<List<StudentProfileModel>> GetAllStudentProfilesAsync() => await studentProfileRepo.GetAllAsync();
     public async Task<List<TeacherProfileModel>> GetAllTeacherProfilesAsync() => await teacherProfileRepo.GetAllAsync();
+    public async Task<List<DisciplineModel>> GetAllDisciplinesAsync() => await disciplineRepo.GetAllAsync();
 
     public async Task AddStudentProfileAsync(string email, string fullName) =>
         await AddProfileAsync(studentProfileRepo, email, fullName);
@@ -58,6 +60,14 @@ public class AdminCabinetService(
             Name = name,
             Description = description,
             ImageUrl = imageUrl?.ToUri()
+        });
+    }
+
+    public async Task AddDisciplineAsync(string name)
+    {
+        await disciplineRepo.AddAsync(new DisciplineModel
+        {
+            Name = name
         });
     }
 }

@@ -21,6 +21,7 @@ public class AdminCabinetViewModel : ViewModel
     public List<AdminCabinetTeacherViewModel> Teachers { get; set; } = [];
     public List<AdminCabinetStudentViewModel> Students { get; set; } = [];
     public List<AdminCabinetGroupViewModel> Groups { get; set; } = [];
+    public List<AdminCabinetDisciplineViewModel> Disciplines { get; set; } = [];
 }
 
 public class AdminCabinetGroupViewModel : ViewModel
@@ -29,4 +30,10 @@ public class AdminCabinetGroupViewModel : ViewModel
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
+}
+
+public class AdminCabinetDisciplineViewModel : ViewModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

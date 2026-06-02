@@ -9,6 +9,28 @@
         <h1 class="text-start text-uppercase">Панель администратора</h1>
     </header>
 
+    <!-- ДИСЦИПЛИНЫ -->
+<div class="container d-flex justify-content-between align-items-start gap-3">
+    <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
+        <header class="text-primary">
+            <h2>Дисциплины</h2>
+        </header>
+        <div class="d-flex flex-wrap align-items-start gap-3">
+            @foreach (var discipline in Model.Disciplines)
+            {
+                <div class="card" style="width: 200px">
+                    <div class="card-body">
+                        <h5>@discipline.Name</h5>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <form method="get" asp-action="AddDiscipline">
+        <button class="btn btn-outline-primary w-100 h-100">Добавить дисциплину</button>
+    </form>
+</div>
+
     <!-- ГРУППЫ -->
     <div class="container d-flex justify-content-between align-items-start gap-3">
         <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
