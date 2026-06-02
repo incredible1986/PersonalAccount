@@ -70,4 +70,12 @@ public class AdminCabinetService(
             Name = name
         });
     }
+
+    public async Task ChangeStudentGroupAsync(int studentAccountId, int newGroupId)
+    {
+        var studentProfile = await studentProfileRepo.GetByAccountIdAsync(studentAccountId)
+            ?? throw new KeyNotFoundException("Student not found");
+
+        await studentProfileRepo.UpdateGroupAsync(studentProfile.Id, newGroupId);
+    }
 }

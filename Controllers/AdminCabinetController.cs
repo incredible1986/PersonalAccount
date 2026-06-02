@@ -53,14 +53,16 @@ public class AdminCabinetController(
                         PhotoUrl = teacherProfile.PhotoUrl?.ToString()
                     }).ToList(),
             Students = studentProfiles.Select(studentProfile => new AdminCabinetStudentViewModel
-                {
-                    FullName = studentProfile.FullName,
-                    Email = accountsDictionary[studentProfile.AccountId].Email,
-                    GroupName = groupsDictionary[studentProfile.GroupId].Name,
-                    PhotoUrl = studentProfile.PhotoUrl?.ToString()
-                }).OrderBy(student => student.GroupName)
-                .ThenBy(student => student.FullName)
-                .ToList(),
+            {
+                AccountId = studentProfile.AccountId,
+                FullName = studentProfile.FullName,
+                Email = accountsDictionary[studentProfile.AccountId].Email,
+                GroupName = groupsDictionary[studentProfile.GroupId].Name,
+                GroupId = studentProfile.GroupId,
+                PhotoUrl = studentProfile.PhotoUrl?.ToString()
+            }).OrderBy(student => student.GroupName)
+    .ThenBy(student => student.FullName)
+    .ToList(),
         });
     }
 
@@ -202,6 +204,14 @@ public class AdminCabinetController(
     {
         if (!ModelState.IsValid) return View(model);
         await adminCabinetService.AddDisciplineAsync(model.Name);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeStudentGroup(int studentAccountId, int newGroupId)
+    {
+        await adminCabinetService.ChangeStudentGroupAsync(studentAccountId, newGroupId);
         return RedirectToAction("Index");
     }
 }
