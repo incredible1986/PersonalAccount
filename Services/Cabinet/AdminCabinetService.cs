@@ -1,4 +1,5 @@
-﻿using PersonalAccount.Models;
+﻿using PersonalAccount.Constants;
+using PersonalAccount.Models;
 using PersonalAccount.Repositories;
 using PersonalAccount.Types;
 using PersonalAccount.Utils;
@@ -77,5 +78,33 @@ public class AdminCabinetService(
             ?? throw new KeyNotFoundException("Student not found");
 
         await studentProfileRepo.UpdateGroupAsync(studentProfile.Id, newGroupId);
+    }
+
+    public async Task DeleteGroupAsync(int groupId)
+    {
+        if (groupId == GroupConstants.NoGroupId) return;
+
+        var students = await studentProfileRepo.GetAllAsync();
+        foreach (var student in students.Where(s => s.GroupId == groupId))
+        {
+            await studentProfileRepo.UpdateGroupAsync(student.Id, GroupConstants.NoGroupId);
+        }
+
+        await groupRepo.DeleteByIdAsync(groupId);
+    }
+
+    public async Task DeleteDisciplineAsync(int disciplineId)
+    {
+        await disciplineRepo.DeleteByIdAsync(disciplineId);
+    }
+
+    public async Task DeleteStudentAsync(int accountId)
+    {
+        await accountRepo.DeleteByIdAsync(accountId);
+    }
+
+    public async Task DeleteTeacherAsync(int accountId)
+    {
+        await accountRepo.DeleteByIdAsync(accountId);
     }
 }

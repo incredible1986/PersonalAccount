@@ -214,4 +214,36 @@ public class AdminCabinetController(
         await adminCabinetService.ChangeStudentGroupAsync(studentAccountId, newGroupId);
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteGroup(int groupId)
+    {
+        await adminCabinetService.DeleteGroupAsync(groupId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteDiscipline(int disciplineId)
+    {
+        await adminCabinetService.DeleteDisciplineAsync(disciplineId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteStudent(int studentAccountId)
+    {
+        await adminCabinetService.DeleteStudentAsync(studentAccountId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteTeacher(int teacherAccountId)
+    {
+        await adminCabinetService.DeleteTeacherAsync(teacherAccountId);
+        return RedirectToAction("Index");
+    }
 }
