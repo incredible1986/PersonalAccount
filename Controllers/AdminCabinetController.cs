@@ -26,9 +26,22 @@ public class AdminCabinetController(
         var teacherProfiles = await adminCabinetService.GetAllTeacherProfilesAsync();
         var groups = await adminCabinetService.GetAllGroupsAsync();
         var groupsDictionary = groups.ToDictionary(group => group.Id);
+        var disciplines = await adminCabinetService.GetAllDisciplinesAsync();
 
         return View(new AdminCabinetViewModel
         {
+            Groups = groups.Select(group => new AdminCabinetGroupViewModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                Description = group.Description,
+                ImageUrl = group.ImageUrl?.ToString()
+            }).ToList(),
+            Disciplines = disciplines.Select(d => new AdminCabinetDisciplineViewModel
+            {
+                Id = d.Id,
+                Name = d.Name
+            }).ToList(),
             Teachers = teacherProfiles
                 .OrderBy(teacherProfile => teacherProfile.FullName)
                 .Select(teacherProfile =>
@@ -40,14 +53,16 @@ public class AdminCabinetController(
                         PhotoUrl = teacherProfile.PhotoUrl?.ToString()
                     }).ToList(),
             Students = studentProfiles.Select(studentProfile => new AdminCabinetStudentViewModel
-                {
-                    FullName = studentProfile.FullName,
-                    Email = accountsDictionary[studentProfile.AccountId].Email,
-                    GroupName = groupsDictionary[studentProfile.GroupId].Name,
-                    PhotoUrl = studentProfile.PhotoUrl?.ToString()
-                }).OrderBy(student => student.GroupName)
-                .ThenBy(student => student.FullName)
-                .ToList(),
+            {
+                AccountId = studentProfile.AccountId,
+                FullName = studentProfile.FullName,
+                Email = accountsDictionary[studentProfile.AccountId].Email,
+                GroupName = groupsDictionary[studentProfile.GroupId].Name,
+                GroupId = studentProfile.GroupId,
+                PhotoUrl = studentProfile.PhotoUrl?.ToString()
+            }).OrderBy(student => student.GroupName)
+    .ThenBy(student => student.FullName)
+    .ToList(),
         });
     }
 
@@ -159,5 +174,76 @@ public class AdminCabinetController(
     {
         await adminCabinetService.AddTeacherGroupDisciplineAsync(teacherAccountId, groupId, disciplineId);
         return RedirectToAction("EditTeacher", new { teacherAccountId });
+    }
+
+    [HttpGet]
+    public IActionResult AddGroup()
+    {
+        return View(new AddGroupViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddGroup(AddGroupViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        await adminCabinetService.AddGroupAsync(model.Name, model.Description ?? string.Empty, model.ImageUrl);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult AddDiscipline()
+    {
+        return View(new AddDisciplineViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddDiscipline(AddDisciplineViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+        await adminCabinetService.AddDisciplineAsync(model.Name);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeStudentGroup(int studentAccountId, int newGroupId)
+    {
+        await adminCabinetService.ChangeStudentGroupAsync(studentAccountId, newGroupId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteGroup(int groupId)
+    {
+        await adminCabinetService.DeleteGroupAsync(groupId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteDiscipline(int disciplineId)
+    {
+        await adminCabinetService.DeleteDisciplineAsync(disciplineId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteStudent(int studentAccountId)
+    {
+        await adminCabinetService.DeleteStudentAsync(studentAccountId);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteTeacher(int teacherAccountId)
+    {
+        await adminCabinetService.DeleteTeacherAsync(teacherAccountId);
+        return RedirectToAction("Index");
     }
 }

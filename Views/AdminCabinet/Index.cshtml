@@ -9,6 +9,69 @@
         <h1 class="text-start text-uppercase">Панель администратора</h1>
     </header>
 
+    <!-- ДИСЦИПЛИНЫ -->
+    <div class="container d-flex justify-content-between align-items-start gap-3">
+        <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
+            <header class="text-primary">
+                <h2>Дисциплины</h2>
+            </header>
+            <div class="d-flex flex-wrap align-items-start gap-3">
+                @foreach (var discipline in Model.Disciplines)
+                {
+                    <div class="card" style="width: 200px">
+                        <div class="card-body">
+                            <h5>@discipline.Name</h5>
+                            <form method="post" asp-action="DeleteDiscipline" class="mt-2">
+                                <input type="hidden" name="disciplineId" value="@discipline.Id" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('Удалить дисциплину @discipline.Name?')">Удалить</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <form method="get" asp-action="AddDiscipline">
+            <button class="btn btn-outline-primary w-100 h-100">Добавить дисциплину</button>
+        </form>
+    </div>
+
+    <!-- ГРУППЫ -->
+    <div class="container d-flex justify-content-between align-items-start gap-3">
+        <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
+            <header class="text-primary">
+                <h2>Группы</h2>
+            </header>
+            <div class="d-flex flex-wrap align-items-start gap-3">
+                @foreach (var group in Model.Groups)
+                {
+                    <div class="card" style="width: 200px">
+                        @if (group.ImageUrl != null)
+                        {
+                            <img class="card-img-top" src="@group.ImageUrl" alt="@group.Name"/>
+                        }
+                        <div class="card-body">
+                            <h5>@group.Name</h5>
+                            <p class="small text-muted">@group.Description</p>
+                            @if (group.Id != -1)
+                            {
+                                <form method="post" asp-action="DeleteGroup" class="mt-2">
+                                    <input type="hidden" name="groupId" value="@group.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                            onclick="return confirm('Удалить группу @group.Name?')">Удалить</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <form method="get" asp-action="AddGroup">
+            <button class="btn btn-outline-primary w-100 h-100">Добавить группу</button>
+        </form>
+    </div>
+
+    <!-- СТУДЕНТЫ -->
     <div class="container d-flex justify-content-between align-items-start gap-3">
         <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
             <header class="text-primary">
@@ -26,16 +89,35 @@
                             <span class="text-primary">@student.Email</span>
                             <span>@student.FullName</span>
                             <span class="fw-bold">@student.GroupName</span>
+                            <form method="post" asp-action="ChangeStudentGroup" class="mt-2">
+                                <input type="hidden" name="studentAccountId" value="@student.AccountId" />
+                                <select name="newGroupId" class="form-select form-select-sm">
+                                    @foreach (var group in Model.Groups)
+                                    {
+                                        if (group.Id != student.GroupId)
+                                        {
+                                            <option value="@group.Id">@group.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-outline-secondary btn-sm mt-1">Сменить группу</button>
+                            </form>
+                            <form method="post" asp-action="DeleteStudent" class="mt-1">
+                                <input type="hidden" name="studentAccountId" value="@student.AccountId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('Удалить студента @student.FullName?')">Удалить</button>
+                            </form>
                         </div>
                     </div>
                 }
             </div>
         </div>
-
         <form method="get" asp-action="AddStudent">
             <button class="btn btn-outline-primary w-100 h-100">Зарегистрировать нового студента</button>
         </form>
     </div>
+
+    <!-- ПРЕПОДАВАТЕЛИ -->
     <div class="container d-flex justify-content-between align-items-start gap-3">
         <div class="d-flex flex-column align-items-stretch gap-2 flex-fill">
             <header class="text-primary">
@@ -52,6 +134,11 @@
                         <div class="card-body d-flex flex-column align-items-stretch justify-content-center gap-1">
                             <span class="text-primary">@teacher.Email</span>
                             <span>@teacher.FullName</span>
+                            <form method="post" asp-action="DeleteTeacher" class="mt-2">
+                                <input type="hidden" name="teacherAccountId" value="@teacher.AccountId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('Удалить преподавателя @teacher.FullName?')">Удалить</button>
+                            </form>
                         </div>
                         <form class="card-footer" method="get" asp-action="EditTeacher">
                             <input type="hidden" name="teacherAccountId" value="@teacher.AccountId"/>
@@ -61,7 +148,6 @@
                 }
             </div>
         </div>
-
         <form method="get" asp-action="AddTeacher">
             <button class="btn btn-outline-primary w-100 h-100">Зарегистрировать нового преподавателя</button>
         </form>
